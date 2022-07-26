@@ -10,33 +10,11 @@ uniform vec2 mouse;
 const float PI = acos(-1.0);
 
 float pixelSize = 2.0;
-const float f = 3.0;
-const float c = -5.0;
 
-
-float checker(float x, float z) {
-  return clamp(6.0 * sin(x * PI / 4.0) * cos(z * PI / 4.0), 0.0, 1.0);
-}
-
-float briFloor(float x, float z) {
-  return clamp(140.0 * checker(x, z) / pow(z, 2.0), 0.0, 1.0);
-}
 
 float briFilm(float l, float m) {
-  vec3 patternVec3;
-  vec3 floorVec3 = vec3(l * f / m, f, f / m);
-  vec3 ceilingVec3 = vec3(l * c / m, c, c / m);
   
-  //#patternVec3 = lessThan(float(floorVec3.z), float(ceilingVec3.z)) ? floorVec3:ceilingVec3;
-  
-  if (floorVec3.z < ceilingVec3.z) {
-    patternVec3 = floorVec3;
-  } else {
-    patternVec3 = ceilingVec3;
-  }
-  
-  return briFloor(patternVec3.x, patternVec3.z);
-  //#return sin(12.0 * l - time) * sin(12.0 * m - time) + 1.0 / 4.0;
+  return sin(12.0 * l - time) * sin(12.0 * m - time) + 1.0 / 4.0;
 }
 
 void main(void) {

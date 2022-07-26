@@ -9,15 +9,14 @@ let mouseY = 0.5;
 let canvasW, canvasH;
 
 let time = 0.0;
-const FPS = 24;
+const FPS = 30;
 const frameTime = 1 / FPS;
 let prevTimestamp = 0;
 
-
 const vs = './shaders/vertex/main.js';
 const fs = './shaders/fragment/main.js';
-const vertexPrimitive = await fetchShader(vs)
-const fragmentPrimitive = await fetchShader(fs)
+const vertexPrimitive = await fetchShader(vs);
+const fragmentPrimitive = await fetchShader(fs);
 
 async function fetchShader(path) {
   const res = await fetch(path);
@@ -25,24 +24,8 @@ async function fetchShader(path) {
   return shaderText;
 }
 
-/*
-document.addEventListener('DOMContentLoaded', async () => {
-  const vs = './shaders/vertex/main.js';
-  const fs = './shaders/fragment/main.js';
-  vertexPrimitive = await fetchShader(vs);
-  fragmentPrimitive = await fetchShader(fs);
-});
-*/
-/*
-document.addEventListener('DOMContentLoaded', () => {
-  createCanvas();
-  initCanvasSize();
-  initShader();
-  render();
-});
-*/
 function createCanvas() {
-  document.body.style.backgroundColor = 'dimgray'
+  document.body.style.backgroundColor = 'dimgray';
   canvasDiv = document.createElement('div');
   cxtCanvas = document.createElement('canvas');
   canvasDiv.style.width = '100%';
@@ -61,7 +44,10 @@ function initCanvasSize() {
 function initShader() {
   gl = cxtCanvas.getContext('webgl2');
   //const prg = create_program(create_shader('vs'), create_shader('fs'));
-  const prg = create_program(create_shader('vs', vertexPrimitive), create_shader('fs', fragmentPrimitive));
+  const prg = create_program(
+    create_shader('vs', vertexPrimitive),
+    create_shader('fs', fragmentPrimitive)
+  );
   uniLocation[0] = gl.getUniformLocation(prg, 'time');
   uniLocation[1] = gl.getUniformLocation(prg, 'mouse');
   uniLocation[2] = gl.getUniformLocation(prg, 'resolution');
@@ -80,32 +66,6 @@ function initShader() {
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vIndex);
 
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
-}
-
-function render(timestamp) {
-  /*
-  const elapsed = (timestamp - prevTimestamp) / 1000;
-  if (elapsed <= frameTime) {
-    requestAnimationFrame(render);
-    return;
-  }
-  prevTimestamp = timestamp;
-  time += prevTimestamp;*/
-  time = timestamp;
-  // カラーバッファをクリア
-  gl.clear(gl.COLOR_BUFFER_BIT);
-
-  // uniform 関連
-  gl.uniform1f(uniLocation[0], time);
-  gl.uniform2fv(uniLocation[1], [mouseX, mouseY]);
-  gl.uniform2fv(uniLocation[2], [canvasW, canvasH]);
-
-  // 描画
-  gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
-  gl.flush();
-
-  // 再帰
-  requestAnimationFrame(render);
 }
 
 // シェーダを生成する関数
@@ -142,55 +102,6 @@ function create_shader(type, text) {
   }
 }
 
-
-
-/*
-// シェーダを生成する関数
-function create_shader(id) {
-  // シェーダを格納する変数
-  let shader;
-
-  // HTMLからscriptタグへの参照を取得
-  const scriptElement = document.getElementById(id);
-
-  // scriptタグが存在しない場合は抜ける
-  if (!scriptElement) {
-    return;
-  }
-
-  // scriptタグのtype属性をチェック
-  switch (scriptElement.type) {
-    // 頂点シェーダの場合
-    case 'x-shader/x-vertex':
-      shader = gl.createShader(gl.VERTEX_SHADER);
-      break;
-
-    // フラグメントシェーダの場合
-    case 'x-shader/x-fragment':
-      shader = gl.createShader(gl.FRAGMENT_SHADER);
-      break;
-
-    default:
-      return;
-  }
-
-  // 生成されたシェーダにソースを割り当てる
-  gl.shaderSource(shader, scriptElement.text);
-
-  // シェーダをコンパイルする
-  gl.compileShader(shader);
-
-  // シェーダが正しくコンパイルされたかチェック
-  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    // 成功していたらシェーダを返して終了
-    return shader;
-  } else {
-    // 失敗していたらエラーログをアラートしコンソールに出力
-    // alert(gl.getShaderInfoLog(shader));
-    console.log(gl.getShaderInfoLog(shader));
-  }
-}
-*/
 // プログラムオブジェクトを生成しシェーダをリンクする関数
 function create_program(vs, fs) {
   // プログラムオブジェクトの生成
@@ -250,6 +161,30 @@ function create_ibo(data) {
 
   // 生成したIBOを返して終了
   return ibo;
+}
+
+function render(timestamp) {
+  const elapsed = (timestamp - prevTimestamp) / 1000;
+  if (elapsed <= frameTime) {
+    requestAnimationFrame(render);
+    return;
+  }
+
+  time = elapsed;
+  // カラーバッファをクリア
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  // uniform 関連
+  gl.uniform1f(uniLocation[0], time);
+  gl.uniform2fv(uniLocation[1], [mouseX, mouseY]);
+  gl.uniform2fv(uniLocation[2], [canvasW, canvasH]);
+
+  // 描画
+  gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+  gl.flush();
+
+  // 再帰
+  requestAnimationFrame(render);
 }
 
 createCanvas();
