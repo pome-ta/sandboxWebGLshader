@@ -10,8 +10,8 @@ uniform vec2 mouse;
 const float PI = acos(-1.0);
 
 float pixelSize = 2.0;
-const float f = 3.0;
-const float c = -5.0;
+const float fSize = 3.0;
+const float cSize = -5.0;
 
 vec2 solve(float a, float b, float c) {
   float l = (-b + sqrt(pow(b, 2.0) - 4.0 * a * c)) / 2.0 * a;
@@ -59,24 +59,18 @@ float briFilm(float l, float m) {
   vec2 solveVec2 = solve(vec3Dot(w, w), 2.0 * vec3Dot(w, vec3Mul(-1.0, c)), vec3Dot(c, c) - pow(r, 2.0));
 
   float s = min(solveVec2.x, solveVec2.y);
-  
   vec3 sw = vec3Mul(s, w);
-  /*
-  if (s < 0.0) {
-  
-  vec3 floorVec3 = vec3(l * f / m, f, f / m);
-  vec3 ceilingVec3 = vec3(l * c / m, c, c / m);
-  
-  if (floorVec3.z < ceilingVec3.z) {
-    return briFloor(floorVec3.x, floorVec3.z);
-    
-  } else {
-    return briFloor(ceilingVec3.x, ceilingVec3.z);
-    
-  }
 
+  if (bool(s)) {
+    vec3 floorVec3 = vec3(l * fSize / m, fSize, fSize / m);
+    vec3 ceilingVec3 = vec3(l * cSize / m, cSize, cSize / m);
+    
+    if (floorVec3.z < ceilingVec3.z) {
+      return briFloor(floorVec3.x, floorVec3.z);
+    } else {
+      return briFloor(ceilingVec3.x, ceilingVec3.z);
+    }
   }
-  */
 
   return s;
 }
@@ -91,4 +85,3 @@ void main(void) {
   
   gl_FragColor = vec4(colorOut, 1.0);
 }
-

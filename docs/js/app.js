@@ -35,15 +35,16 @@ function createCanvas() {
 }
 
 function initCanvasSize() {
-  cxtCanvas.width = canvasDiv.clientWidth;
-  cxtCanvas.height = canvasDiv.clientWidth;
+  const oneSide = Math.min(canvasDiv.clientWidth, canvasDiv.clientHeight);
+  cxtCanvas.width = oneSide;
+  cxtCanvas.height = oneSide;
   canvasW = cxtCanvas.width;
   canvasH = cxtCanvas.height;
 }
 
 function initShader() {
   gl = cxtCanvas.getContext('webgl2');
-  //const prg = create_program(create_shader('vs'), create_shader('fs'));
+  // gl = cxtCanvas.getContext('webgl');
   const prg = create_program(
     create_shader('vs', vertexPrimitive),
     create_shader('fs', fragmentPrimitive)
@@ -60,6 +61,7 @@ function initShader() {
   const vPosition = create_vbo(position);
   const vIndex = create_ibo(index);
   const vAttLocation = gl.getAttribLocation(prg, 'position');
+
   gl.bindBuffer(gl.ARRAY_BUFFER, vPosition);
   gl.enableVertexAttribArray(vAttLocation);
   gl.vertexAttribPointer(vAttLocation, 3, gl.FLOAT, false, 0, 0);
@@ -77,12 +79,10 @@ function create_shader(type, text) {
     case 'vs':
       shader = gl.createShader(gl.VERTEX_SHADER);
       break;
-
     // フラグメントシェーダの場合
     case 'fs':
       shader = gl.createShader(gl.FRAGMENT_SHADER);
       break;
-
     default:
       return;
   }
@@ -106,19 +106,15 @@ function create_shader(type, text) {
 function create_program(vs, fs) {
   // プログラムオブジェクトの生成
   const program = gl.createProgram();
-
   // プログラムオブジェクトにシェーダを割り当てる
   gl.attachShader(program, vs);
   gl.attachShader(program, fs);
-
   // シェーダをリンク
   gl.linkProgram(program);
-
   // シェーダのリンクが正しく行なわれたかチェック
   if (gl.getProgramParameter(program, gl.LINK_STATUS)) {
     // 成功していたらプログラムオブジェクトを有効にする
     gl.useProgram(program);
-
     // プログラムオブジェクトを返して終了
     return program;
   } else {
@@ -131,16 +127,12 @@ function create_program(vs, fs) {
 function create_vbo(data) {
   // バッファオブジェクトの生成
   const vbo = gl.createBuffer();
-
   // バッファをバインドする
   gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
-
   // バッファにデータをセット
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
-
   // バッファのバインドを無効化
   gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
   // 生成した VBO を返して終了
   return vbo;
 }
@@ -149,16 +141,12 @@ function create_vbo(data) {
 function create_ibo(data) {
   // バッファオブジェクトの生成
   const ibo = gl.createBuffer();
-
   // バッファをバインドする
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
-
   // バッファにデータをセット
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Int16Array(data), gl.STATIC_DRAW);
-
   // バッファのバインドを無効化
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
-
   // 生成したIBOを返して終了
   return ibo;
 }
@@ -173,16 +161,13 @@ function render(timestamp) {
   time = elapsed;
   // カラーバッファをクリア
   gl.clear(gl.COLOR_BUFFER_BIT);
-
   // uniform 関連
   gl.uniform1f(uniLocation[0], time);
   gl.uniform2fv(uniLocation[1], [mouseX, mouseY]);
   gl.uniform2fv(uniLocation[2], [canvasW, canvasH]);
-
   // 描画
   gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
   gl.flush();
-
   // 再帰
   requestAnimationFrame(render);
 }
