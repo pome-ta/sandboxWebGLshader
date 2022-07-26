@@ -1,61 +1,68 @@
 'use strict';
 
-let run;
+let canvasDiv, cxtCanvas;
+let gl;
 let uniLocation = new Array();
-let mx = 0.0;
-let my = 0.0;
+
+let mouseX = 0.5;
+let mouseY = 0.5;
 
 let time = 0.0;
 const FPS = 24;
 const frameTime = 1 / FPS;
 let prevTimestamp = 0;
 
-let WIDTH, HEIGHT;
+let canvasW, canvasH;
 
-const canvasDiv = document.createElement('div');
-canvasDiv.style.width = '100%';
-const cxtCanvas = document.createElement('canvas');
-cxtCanvas.style.width = '100%';
-canvasDiv.appendChild(cxtCanvas);
-document.body.appendChild(canvasDiv);
+function createCanvas() {
+  canvasDiv = document.createElement('div');
+  cxtCanvas = document.createElement('canvas');
+  canvasDiv.style.width = '100%';
+  cxtCanvas.style.width = '100%';
+  canvasDiv.appendChild(cxtCanvas);
+  document.body.appendChild(canvasDiv);
+}
 
-const gl = cxtCanvas.getContext('webgl');
-const prg = create_program(create_shader('vs'), create_shader('fs'));
-run = prg ? prg : null;
-uniLocation[0] = gl.getUniformLocation(prg, 'time');
-uniLocation[1] = gl.getUniformLocation(prg, 'mouse');
-uniLocation[2] = gl.getUniformLocation(prg, 'rezolution');
+function initShader() {
+  gl = cxtCanvas.getContext('webgl');
+  const prg = create_program(create_shader('vs'), create_shader('fs'));
+  uniLocation[0] = gl.getUniformLocation(prg, 'time');
+  uniLocation[1] = gl.getUniformLocation(prg, 'mouse');
+  uniLocation[2] = gl.getUniformLocation(prg, 'resolution');
 
-const position = [
-  -1.0, 1.0, 0.0, 1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0,
-];
-const index = [0, 2, 1, 1, 2, 3];
+  const position = [
+    -1.0, 1.0, 0.0, 1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0,
+  ];
+  const index = [0, 2, 1, 1, 2, 3];
 
-const vPosition = create_vbo(position);
-const vIndex = create_ibo(index);
-const vAttLocation = gl.getAttribLocation(prg, 'position');
-gl.bindBuffer(gl.ARRAY_BUFFER, vPosition);
-gl.enableVertexAttribArray(vAttLocation);
-gl.vertexAttribPointer(vAttLocation, 3, gl.FLOAT, false, 0, 0);
-gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vIndex);
+  const vPosition = create_vbo(position);
+  const vIndex = create_ibo(index);
+  const vAttLocation = gl.getAttribLocation(prg, 'position');
+  gl.bindBuffer(gl.ARRAY_BUFFER, vPosition);
+  gl.enableVertexAttribArray(vAttLocation);
+  gl.vertexAttribPointer(vAttLocation, 3, gl.FLOAT, false, 0, 0);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vIndex);
 
-gl.clearColor(0.0, 0.0, 0.0, 1.0);
+  gl.clearColor(0.0, 0.0, 0.0, 1.0);
+}
 
 function render(timestamp) {
+  /*
   const elapsed = (timestamp - prevTimestamp) / 1000;
   if (elapsed <= frameTime) {
     requestAnimationFrame(render);
     return;
   }
   prevTimestamp = timestamp;
-  time += prevTimestamp;
+  time += prevTimestamp;*/
+  time = timestamp;
   // カラーバッファをクリア
   gl.clear(gl.COLOR_BUFFER_BIT);
 
   // uniform 関連
   gl.uniform1f(uniLocation[0], time);
-  gl.uniform2fv(uniLocation[1], [mx, my]);
-  gl.uniform2fv(uniLocation[2], [WIDTH, HEIGHT]);
+  gl.uniform2fv(uniLocation[1], [mouseX, mouseY]);
+  gl.uniform2fv(uniLocation[2], [canvasW, canvasH]);
 
   // 描画
   gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
@@ -68,12 +75,14 @@ function render(timestamp) {
 function initCanvas() {
   cxtCanvas.width = canvasDiv.clientWidth;
   cxtCanvas.height = canvasDiv.clientWidth;
-  WIDTH = canvasDiv.width;
-  HEIGHT = cxtCanvas.height;
+  canvasW = cxtCanvas.width;
+  canvasH = cxtCanvas.height;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  createCanvas();
   initCanvas();
+  initShader();
   render();
 });
 
