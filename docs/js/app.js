@@ -6,13 +6,12 @@ let uniLocation = new Array();
 
 let mouseX = 0.5;
 let mouseY = 0.5;
+let canvasW, canvasH;
 
 let time = 0.0;
 const FPS = 24;
 const frameTime = 1 / FPS;
 let prevTimestamp = 0;
-
-let canvasW, canvasH;
 
 function createCanvas() {
   canvasDiv = document.createElement('div');
@@ -22,6 +21,14 @@ function createCanvas() {
   canvasDiv.appendChild(cxtCanvas);
   document.body.appendChild(canvasDiv);
 }
+
+function initCanvasSize() {
+  cxtCanvas.width = canvasDiv.clientWidth;
+  cxtCanvas.height = canvasDiv.clientWidth;
+  canvasW = cxtCanvas.width;
+  canvasH = cxtCanvas.height;
+}
+
 
 function initShader() {
   gl = cxtCanvas.getContext('webgl');
@@ -72,16 +79,10 @@ function render(timestamp) {
   requestAnimationFrame(render);
 }
 
-function initCanvas() {
-  cxtCanvas.width = canvasDiv.clientWidth;
-  cxtCanvas.height = canvasDiv.clientWidth;
-  canvasW = cxtCanvas.width;
-  canvasH = cxtCanvas.height;
-}
 
 document.addEventListener('DOMContentLoaded', () => {
   createCanvas();
-  initCanvas();
+  initCanvasSize();
   initShader();
   render();
 });
