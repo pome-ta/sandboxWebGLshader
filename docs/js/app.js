@@ -13,6 +13,34 @@ const FPS = 24;
 const frameTime = 1 / FPS;
 let prevTimestamp = 0;
 
+
+const vs = './shaders/vertex/main.js';
+const fs = './shaders/fragment/main.js';
+const vertexPrimitive = await fetchShader(vs)
+const fragmentPrimitive = await fetchShader(fs)
+
+async function fetchShader(path) {
+  const res = await fetch(path);
+  const shaderText = await res.text();
+  return shaderText;
+}
+
+/*
+document.addEventListener('DOMContentLoaded', async () => {
+  const vs = './shaders/vertex/main.js';
+  const fs = './shaders/fragment/main.js';
+  vertexPrimitive = await fetchShader(vs);
+  fragmentPrimitive = await fetchShader(fs);
+});
+*/
+/*
+document.addEventListener('DOMContentLoaded', () => {
+  createCanvas();
+  initCanvasSize();
+  initShader();
+  render();
+});
+*/
 function createCanvas() {
   canvasDiv = document.createElement('div');
   cxtCanvas = document.createElement('canvas');
@@ -29,10 +57,10 @@ function initCanvasSize() {
   canvasH = cxtCanvas.height;
 }
 
-
 function initShader() {
-  gl = cxtCanvas.getContext('webgl');
-  const prg = create_program(create_shader('vs'), create_shader('fs'));
+  gl = cxtCanvas.getContext('webgl2');
+  //const prg = create_program(create_shader('vs'), create_shader('fs'));
+  const prg = create_program(create_shader('vs', vertexPrimitive), create_shader('fs', fragmentPrimitive));
   uniLocation[0] = gl.getUniformLocation(prg, 'time');
   uniLocation[1] = gl.getUniformLocation(prg, 'mouse');
   uniLocation[2] = gl.getUniformLocation(prg, 'resolution');
@@ -79,14 +107,45 @@ function render(timestamp) {
   requestAnimationFrame(render);
 }
 
+// シェーダを生成する関数
+function create_shader(type, text) {
+  let shader;
+  // scriptタグのtype属性をチェック
+  switch (type) {
+    // 頂点シェーダの場合
+    case 'vs':
+      shader = gl.createShader(gl.VERTEX_SHADER);
+      break;
 
-document.addEventListener('DOMContentLoaded', () => {
-  createCanvas();
-  initCanvasSize();
-  initShader();
-  render();
-});
+    // フラグメントシェーダの場合
+    case 'fs':
+      shader = gl.createShader(gl.FRAGMENT_SHADER);
+      break;
 
+    default:
+      return;
+  }
+
+  // 生成されたシェーダにソースを割り当てる
+  gl.shaderSource(shader, text);
+
+  // シェーダをコンパイルする
+  gl.compileShader(shader);
+
+  // シェーダが正しくコンパイルされたかチェック
+  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    // 成功していたらシェーダを返して終了
+    return shader;
+  } else {
+    // 失敗していたらエラーログをアラートしコンソールに出力
+    // alert(gl.getShaderInfoLog(shader));
+    console.log(gl.getShaderInfoLog(shader));
+  }
+}
+
+
+
+/*
 // シェーダを生成する関数
 function create_shader(id) {
   // シェーダを格納する変数
@@ -132,7 +191,7 @@ function create_shader(id) {
     console.log(gl.getShaderInfoLog(shader));
   }
 }
-
+*/
 // プログラムオブジェクトを生成しシェーダをリンクする関数
 function create_program(vs, fs) {
   // プログラムオブジェクトの生成
@@ -193,3 +252,8 @@ function create_ibo(data) {
   // 生成したIBOを返して終了
   return ibo;
 }
+
+createCanvas();
+initCanvasSize();
+initShader();
+render();
