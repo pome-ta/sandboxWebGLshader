@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 */
 function createCanvas() {
+  document.body.style.backgroundColor = 'dimgray'
   canvasDiv = document.createElement('div');
   cxtCanvas = document.createElement('canvas');
   canvasDiv.style.width = '100%';
@@ -128,10 +129,8 @@ function create_shader(type, text) {
 
   // 生成されたシェーダにソースを割り当てる
   gl.shaderSource(shader, text);
-
   // シェーダをコンパイルする
   gl.compileShader(shader);
-
   // シェーダが正しくコンパイルされたかチェック
   if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     // 成功していたらシェーダを返して終了
