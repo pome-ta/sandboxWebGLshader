@@ -43,8 +43,8 @@ function initCanvasSize() {
 }
 
 function initShader() {
-  gl = cxtCanvas.getContext('webgl2');
-  // gl = cxtCanvas.getContext('webgl');
+  //gl = cxtCanvas.getContext('webgl2');
+  gl = cxtCanvas.getContext('webgl');
   const prg = create_program(
     create_shader('vs', vertexPrimitive),
     create_shader('fs', fragmentPrimitive)
