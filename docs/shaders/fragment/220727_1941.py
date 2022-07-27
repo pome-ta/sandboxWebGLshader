@@ -25,7 +25,7 @@ float briFilm(float l, float m) {
 void main(void) {
   vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
   
-  float x = p.x + pixelSize / 1.0;
+  float x = p.x;// * 1.0 / pixelSize;
   float y = p.y;// * 1.0 / pixelSize;
   
   vec3 colorOut = vec3(briFilm(x, 1.0));
