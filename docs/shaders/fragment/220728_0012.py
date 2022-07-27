@@ -101,4 +101,3 @@ void main(void) {
   vec3 colorOut = vec3(briFilm(x, y));
   gl_FragColor = vec4(colorOut, 1.0);
 }
-

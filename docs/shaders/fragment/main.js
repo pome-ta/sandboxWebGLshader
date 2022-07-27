@@ -1,71 +1,99 @@
-#ifdef GL_ES
+// [8分でわかるレイトレーシング | ヘロンの数学ちゃんねる](https://heron-no-suugaku.sakura.ne.jp/code/cg-raytracing/)
+
+// #ifdef GL_ES
 precision highp float;
-#endif
+// #endif
 
 uniform float time;
 uniform vec2 resolution;
-
+uniform vec2 mouse;
 
 const float PI = acos(-1.0);
 
-vec2 rot(vec2 p, float a) {
-  return vec2(p.x * cos(a) - p.y * sin(a), p.x * sin(a) + p.y * cos(a));
+float pixelSize = 1.0;
+float ps = 100.0 / pixelSize;
+
+float upToFloor = 6.0;
+float upToCeiling = -6.0;
+
+bool isNan(float val) { return ( val < 0.0 || 0.0 < val || val == 0.0 ) ? false : true;}
+
+vec2 solve(float a, float b, float c) {
+  float l = (-b + sqrt(pow(b, 2.0) - 4.0 * a * c)) / 2.0 * a;
+  float r = (-b - sqrt(pow(b, 2.0) - 4.0 * a * c)) / 2.0 * a;
+  return vec2(l, r);
 }
 
-// LIVE Shader Deconstruction :: happy jumping
-// https://www.youtube.com/watch?v=Cfe5UQ-1L9Q&feature=youtu.be
-// around 53:00
-float map(vec3 p) {
-  float d = length(p) - 0.25;
-  float d2 = p.y + 0.25;
-  return min(d, d2);
+vec3 vec3Mul(float s, vec3 v) { return vec3(s * v.x, s * v.y, s * v.z); }
+vec3 vec3Add(vec3 v, vec3 w) { return vec3(v.x + w.x, v.y + w.y, v.z + v.z); }
+vec3 vec3Sub(vec3 v, vec3 w) { return vec3Add(v, vec3Mul(-1.0, w)); }
+float vec3Dot(vec3 v, vec3 w) { return v.x * w.x + v.y * w.y + v.z * w.z; }
+float norm(vec3 v) { return sqrt(pow(v.x, 2.0) + pow(v.y, 2.0) + pow(v.z, 2.0)); }
+vec3 vec3Normalize(vec3 v) { return vec3Mul(1.0 / norm(v), v); }
+
+float checker(float x, float z) {
+  return clamp(6.0 * sin(x * PI / 4.0 - time) * cos(z * PI / 4.0 - time), 0.0, 1.0);
+  // return clamp(8.0 * sin(x * PI / 4.0) * cos(z * PI / 4.0), 0.0, 1.0);
 }
 
-vec3 normal(vec3 p){
-    vec2 e=vec2(.001,.0);
-    return normalize(.000001+map(p)-vec3(map(p-e.xyy),map(p-e.yxy),map(p-e.yyx)));
+float briFloor(float x, float z) {
+  if (abs(z) > 60.0) {
+    return 0.0;
+  }
+  return clamp(140.0 * checker(x, z) / pow(z, 2.0), 0.0, 1.0);
+  // return clamp(140.0 * checker(x, z), 0.0, 1.0);
 }
 
-float castRay(vec3 ro,vec3 rd){
-    float t=0.0;
-    for(int i=0;i<200;++i){
-	    float f=map(ro+t*rd);
-	    if(f<.001) break;
-	    if(t>20.) break;
-        t+=f;
-	}
-	if(t>20.) t=-1.;
-	return t;
-}
+float briFilm(float l, float m) {
+  vec3 w = vec3Normalize(vec3(l, m, 1.0));
+  
+  // createCanvas(640,640);
+  vec3 c = vec3(320.0 / 60.0 - 2.5, 1.0, -320.0 / 60.0 + 15.0);
+  float r = 4.0;
+  
+  vec2 solveVec2 = solve(vec3Dot(w, w), 2.0 * vec3Dot(w, vec3Mul(-1.0, c)), vec3Dot(c, c) - pow(r, 2.0));
 
-void main(void)
-{
-	vec2 p = (2.*gl_FragCoord.xy-resolution.xy) / min(resolution.x,resolution.y);
-	vec3 col=vec3(.6,.7,.8);
-	
-	vec3 ro=vec3(.0,.0,1.)
-	,rd=normalize(vec3(p,-1.5));
-	
-    vec3 N=vec3(.0),ray=ro;
-    float d=castRay(ro,rd);
+  float s = min(solveVec2.x, solveVec2.y);
+  bool boolenS = isNan(s);
+  vec3 sw = vec3Mul(s, w);
 
-    if(d>.0){
-        N=normal(ro+d*rd);
-        vec3 mate=vec3(.18);
-        
-        vec3 sun_dir=normalize(vec3(.8,.4,.2));
-        float sun_dif=clamp(dot(N,sun_dir),.0,1.);
-        float sun_sha=step(castRay(ro+d*rd+N*.001,sun_dir),.0);
-        float sky_dif=clamp(.5+.5*dot(N,vec3(.0,1.,.0)),.0,1.);
-        float bou_dif=clamp(.5+.5*dot(N,vec3(.0,-1.,.0)),.0,1.);
-        
-        col=mate*vec3(7.,4.5,3.)*sun_dif*sun_sha;
-        col+=mate*vec3(.5,.8,.9)*sky_dif;
-        col+=mate*vec3(.7,.3,.2)*bou_dif;
-    }
-//    if(d<.0) col-=sun_dif;
+
+  //if (bool(s)) {
+  if (boolenS) {
+    vec3 floorVec3 = vec3(l * upToFloor / m, upToFloor, upToFloor / m);
+    vec3 ceilingVec3 = vec3(l * upToCeiling / m, upToCeiling, upToCeiling / m);
     
-    col=pow(col, vec3(.4545));
-	
-	gl_FragColor = vec4(col, 1.);
+    if (floorVec3.z < ceilingVec3.z) {
+      return briFloor(floorVec3.x, floorVec3.z);
+    } else {
+      return briFloor(ceilingVec3.x, ceilingVec3.z);
+    }
+  }
+  
+  vec3 n = vec3Normalize(vec3Sub(sw, c));
+  vec3 b = vec3Add(sw, vec3Mul(vec3Dot(vec3Mul(-2.0, sw), n), n));
+  
+  vec3 _nA = vec3(0.0, 1.0, 0.0);
+  vec3 _nB = vec3(0.0, -1.0, 0.0);
+  float indexA = (upToFloor - vec3Dot(_nA, sw)) / vec3Dot(_nA, b);
+  float indexB = (abs(upToCeiling) - vec3Dot(_nB, sw)) / vec3Dot(_nB, b);
+  
+  float u = indexA > indexB ? indexA : indexB;
+  vec3 v = vec3Add(sw, vec3Mul(u, b));
+  
+  return briFloor(v.x, v.z);
 }
+
+
+void main(void) {
+  vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
+  
+  p *= ps;
+  vec2 id = floor(p);
+  float x = id.x * 1.0 / ps;
+  float y = id.y * 1.0 / ps;
+
+  vec3 colorOut = vec3(briFilm(x, y));
+  gl_FragColor = vec4(colorOut, 1.0);
+}
+
