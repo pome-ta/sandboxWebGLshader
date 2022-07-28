@@ -51,6 +51,7 @@ float briFilm(float l, float m) {
   vec3 w = vec3Normalize(vec3(l, m, 1.0));
   
   // createCanvas(640,640);
+  // 213
   vec3 c = vec3(320.0 / 60.0 - 5.5, 1.0, -320.0 / 60.0 + 18.0);
   float r = 2.0;
   
@@ -59,7 +60,8 @@ float briFilm(float l, float m) {
   float s = min(solveVec2.x, solveVec2.y);
   vec3 sw = vec3Mul(s, w);
 
-
+  //return s;
+  
   if (!bool(sign(s))) {
     vec3 floorVec3 = vec3(l * upToFloor / m, upToFloor, upToFloor / m);
     vec3 ceilingVec3 = vec3(l * upToCeiling / m, upToCeiling, upToCeiling / m);

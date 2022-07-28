@@ -36,6 +36,7 @@ function createCanvas() {
 
 function initCanvasSize() {
   const oneSide = Math.min(canvasDiv.clientWidth, canvasDiv.clientHeight);
+  //const oneSide = 640
   cxtCanvas.width = oneSide;
   cxtCanvas.height = oneSide;
   canvasW = cxtCanvas.width;
