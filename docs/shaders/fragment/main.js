@@ -10,9 +10,9 @@ uniform vec2 mouse;
 
 const float PI = acos(-1.0);
 
-const float pixelSize = 0.01;
-const float upToFloor = 6.0;
-const float upToCeiling = -6.0;
+const float pixelSize = 0.1;
+const float upToFloor = 3.0;
+const float upToCeiling = -5.0;
 
 
 vec2 solve(float a, float b, float c) {
@@ -22,11 +22,17 @@ vec2 solve(float a, float b, float c) {
 }
 
 vec3 vec3Mul(float s, vec3 v) { return vec3(s * v.x, s * v.y, s * v.z); }
+
 vec3 vec3Add(vec3 v, vec3 w) { return vec3(v.x + w.x, v.y + w.y, v.z + v.z); }
+
 vec3 vec3Sub(vec3 v, vec3 w) { return vec3Add(v, vec3Mul(-1.0, w)); }
+
 float vec3Dot(vec3 v, vec3 w) { return v.x * w.x + v.y * w.y + v.z * w.z; }
+
 float norm(vec3 v) { return sqrt(pow(v.x, 2.0) + pow(v.y, 2.0) + pow(v.z, 2.0)); }
+
 vec3 vec3Normalize(vec3 v) { return vec3Mul(1.0 / norm(v), v); }
+
 
 float checker(float x, float z) {
   return clamp(6.0 * sin(x * PI / 4.0 - time) * cos(z * PI / 4.0 - time), 0.0, 1.0);
@@ -45,8 +51,8 @@ float briFilm(float l, float m) {
   vec3 w = vec3Normalize(vec3(l, m, 1.0));
   
   // createCanvas(640,640);
-  vec3 c = vec3(320.0 / 60.0 - 2.5, 1.0, -320.0 / 60.0 + 15.0);
-  float r = 4.0;
+  vec3 c = vec3(320.0 / 60.0 - 5.5, 1.0, -320.0 / 60.0 + 18.0);
+  float r = 2.0;
   
   vec2 solveVec2 = solve(vec3Dot(w, w), 2.0 * vec3Dot(w, vec3Mul(-1.0, c)), vec3Dot(c, c) - pow(r, 2.0));
 
@@ -73,7 +79,7 @@ float briFilm(float l, float m) {
   float indexA = (upToFloor - vec3Dot(_nA, sw)) / vec3Dot(_nA, b);
   float indexB = (abs(upToCeiling) - vec3Dot(_nB, sw)) / vec3Dot(_nB, b);
   
-  float u = indexA > indexB ? indexA : indexB;
+  float u = indexA < indexB ? indexA : indexB;
   vec3 v = vec3Add(sw, vec3Mul(u, b));
   
   return briFloor(v.x, v.z);
