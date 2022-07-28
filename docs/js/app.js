@@ -13,7 +13,7 @@ const switchPlayPause = ['Play', 'Pause'];
 let playPauseButton;
 
 let time = 0.0;
-const FPS = 30;
+const FPS = 60;
 const frameTime = 1 / FPS;
 let prevTimestamp = 0;
 
@@ -206,9 +206,13 @@ function checkChange(event) {
   playPauseButton.textContent = switchPlayPause[isPlaying];
 }
 
+cxtCanvas.addEventListener('touchmove', (event) => {
+  event.preventDefault();
+});
 cxtCanvas.addEventListener('pointermove', moveInteractive);
 
 function moveInteractive(event) {
+  event.preventDefault();
   mouseX = event.offsetX / canvasW;
   mouseY = event.offsetY / canvasH;
 }
