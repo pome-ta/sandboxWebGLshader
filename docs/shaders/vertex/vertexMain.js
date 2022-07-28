@@ -1,5 +1,8 @@
-attribute vec3 position;
+#version 300 es
+precision highp float;
+
+in vec3 vertexPosition;
 
 void main(void){
-    gl_Position = vec4(position, 1.0);
+    gl_Position = vec4(vertexPosition, 1.0);
 }

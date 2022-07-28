@@ -28,15 +28,15 @@ function createCanvas() {
   document.body.style.backgroundColor = 'dimgray';
   canvasDiv = document.createElement('div');
   cxtCanvas = document.createElement('canvas');
-  canvasDiv.style.width = '100%';
-  cxtCanvas.style.width = '100%';
   canvasDiv.appendChild(cxtCanvas);
   document.body.appendChild(canvasDiv);
+  canvasDiv.style.width = '100%';
+  cxtCanvas.style.width = '100%';
 }
 
 function initCanvasSize() {
-  const oneSide = Math.min(canvasDiv.clientWidth, canvasDiv.clientHeight);
-  //const oneSide = 640
+  // const oneSide = Math.min(canvasDiv.clientWidth, canvasDiv.clientHeight);
+  const oneSide = canvasDiv.clientWidth;
   cxtCanvas.width = oneSide;
   cxtCanvas.height = oneSide;
   canvasW = cxtCanvas.width;
@@ -54,18 +54,20 @@ function initShader() {
   uniLocation[1] = gl.getUniformLocation(prg, 'mouse');
   uniLocation[2] = gl.getUniformLocation(prg, 'resolution');
 
-  const position = [
+  const position = new Float32Array([
     -1.0, 1.0, 0.0, 1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0,
-  ];
-  const index = [0, 2, 1, 1, 2, 3];
+  ]);
+  const index = new Uint16Array([0, 2, 1, 1, 2, 3]);
 
   const vPosition = create_vbo(position);
   const vIndex = create_ibo(index);
-  const vAttLocation = gl.getAttribLocation(prg, 'position');
+  const vAttLocation = gl.getAttribLocation(prg, 'vertexPosition');
+
+  const VERTEX_SIZE = 3; // vec3
 
   gl.bindBuffer(gl.ARRAY_BUFFER, vPosition);
   gl.enableVertexAttribArray(vAttLocation);
-  gl.vertexAttribPointer(vAttLocation, 3, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(vAttLocation, VERTEX_SIZE, gl.FLOAT, false, 0, 0);
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vIndex);
 
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -132,6 +134,7 @@ function create_vbo(data) {
   gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
   // バッファにデータをセット
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
   // バッファのバインドを無効化
   gl.bindBuffer(gl.ARRAY_BUFFER, null);
   // 生成した VBO を返して終了
@@ -145,7 +148,8 @@ function create_ibo(data) {
   // バッファをバインドする
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
   // バッファにデータをセット
-  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Int16Array(data), gl.STATIC_DRAW);
+  // gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Int16Array(data), gl.STATIC_DRAW);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl.STATIC_DRAW);
   // バッファのバインドを無効化
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
   // 生成したIBOを返して終了
