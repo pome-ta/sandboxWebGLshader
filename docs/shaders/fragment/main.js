@@ -1,8 +1,8 @@
 // [8分でわかるレイトレーシング | ヘロンの数学ちゃんねる](https://heron-no-suugaku.sakura.ne.jp/code/cg-raytracing/)
 
-// #ifdef GL_ES
+#ifdef GL_ES
 precision highp float;
-// #endif
+#endif
 
 uniform float time;
 uniform vec2 resolution;
@@ -10,7 +10,7 @@ uniform vec2 mouse;
 
 const float PI = acos(-1.0);
 
-float pixelSize = 1.0;
+float pixelSize = 0.01;
 float ps = 100.0 / pixelSize;
 
 float upToFloor = 6.0;
