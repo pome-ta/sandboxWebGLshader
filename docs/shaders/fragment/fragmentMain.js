@@ -59,8 +59,6 @@ float briFilm(float l, float m) {
 
   float s = min(solveVec2.x, solveVec2.y);
   vec3 sw = vec3Mul(s, w);
-
-  //return s;
   
   if (!bool(sign(s))) {
     vec3 floorVec3 = vec3(l * upToFloor / m, upToFloor, upToFloor / m);
@@ -100,4 +98,5 @@ void main(void) {
   vec3 colorOut = vec3(briFilm(x, y));
   gl_FragColor = vec4(colorOut, 1.0);
 }
+
 
