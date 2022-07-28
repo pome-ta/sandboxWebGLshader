@@ -8,6 +8,10 @@ let mouseX = 0.5;
 let mouseY = 0.5;
 let canvasW, canvasH;
 
+let isPlaying = 1;
+const switchPlayPause = ['Play', 'Pause'];
+let playPauseButton;
+
 let time = 0.0;
 const FPS = 30;
 const frameTime = 1 / FPS;
@@ -32,6 +36,18 @@ function createCanvas() {
   document.body.appendChild(canvasDiv);
   canvasDiv.style.width = '100%';
   cxtCanvas.style.width = '100%';
+}
+
+function createPlayPuseButton() {
+  playPauseButton = document.createElement('button');
+  playPauseButton.type = 'button';
+  playPauseButton.style.width = '100%';
+  playPauseButton.style.height = '4rem';
+  playPauseButton.textContent = switchPlayPause[isPlaying];
+  const playPauseSection = document.createElement('section');
+  playPauseSection.style.width = '100%';
+  playPauseSection.appendChild(playPauseButton);
+  document.body.appendChild(playPauseSection);
 }
 
 function initCanvasSize() {
@@ -162,8 +178,7 @@ function render(timestamp) {
     requestAnimationFrame(render);
     return;
   }
-
-  time = elapsed;
+  time = isPlaying ? elapsed : time;
   // カラーバッファをクリア
   gl.clear(gl.COLOR_BUFFER_BIT);
   // uniform 関連
@@ -173,11 +188,27 @@ function render(timestamp) {
   // 描画
   gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
   gl.flush();
+
   // 再帰
   requestAnimationFrame(render);
 }
 
 createCanvas();
+createPlayPuseButton();
 initCanvasSize();
 initShader();
 render();
+
+playPauseButton.addEventListener('click', checkChange);
+
+function checkChange(event) {
+  isPlaying = isPlaying ^ 1;
+  playPauseButton.textContent = switchPlayPause[isPlaying];
+}
+
+cxtCanvas.addEventListener('pointermove', moveInteractive);
+
+function moveInteractive(event) {
+  mouseX = event.offsetX / canvasW;
+  mouseY = event.offsetY / canvasH;
+}
