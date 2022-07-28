@@ -14,6 +14,7 @@ const float pixelSize = 0.1;
 const float upToFloor = 3.0;
 const float upToCeiling = -5.0;
 
+bool isNan(float val) { return ( val < 0.0 || 0.0 < val || val == 0.0 ) ? false : true;}
 
 vec2 solve(float a, float b, float c) {
   float l = (-b + sqrt(pow(b, 2.0) - 4.0 * a * c)) / 2.0 * a;
@@ -60,7 +61,7 @@ float briFilm(float l, float m) {
   float s = min(solveVec2.x, solveVec2.y);
   vec3 sw = vec3Mul(s, w);
   
-  if (!bool(sign(s))) {
+  if (isNan(s) || !bool(sign(s))) {
     vec3 floorVec3 = vec3(l * upToFloor / m, upToFloor, upToFloor / m);
     vec3 ceilingVec3 = vec3(l * upToCeiling / m, upToCeiling, upToCeiling / m);
     
