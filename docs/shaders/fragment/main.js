@@ -10,13 +10,10 @@ uniform vec2 mouse;
 
 const float PI = acos(-1.0);
 
-float pixelSize = 0.01;
-float ps = 100.0 / pixelSize;
+const float pixelSize = 0.01;
+const float upToFloor = 6.0;
+const float upToCeiling = -6.0;
 
-float upToFloor = 6.0;
-float upToCeiling = -6.0;
-
-bool isNan(float val) { return ( val < 0.0 || 0.0 < val || val == 0.0 ) ? false : true;}
 
 vec2 solve(float a, float b, float c) {
   float l = (-b + sqrt(pow(b, 2.0) - 4.0 * a * c)) / 2.0 * a;
@@ -54,12 +51,10 @@ float briFilm(float l, float m) {
   vec2 solveVec2 = solve(vec3Dot(w, w), 2.0 * vec3Dot(w, vec3Mul(-1.0, c)), vec3Dot(c, c) - pow(r, 2.0));
 
   float s = min(solveVec2.x, solveVec2.y);
-  bool boolenS = isNan(s);
   vec3 sw = vec3Mul(s, w);
 
 
-  //if (bool(s)) {
-  if (boolenS) {
+  if (!bool(sign(s))) {
     vec3 floorVec3 = vec3(l * upToFloor / m, upToFloor, upToFloor / m);
     vec3 ceilingVec3 = vec3(l * upToCeiling / m, upToCeiling, upToCeiling / m);
     
@@ -88,6 +83,7 @@ float briFilm(float l, float m) {
 void main(void) {
   vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
   
+  float ps = 100.0 / pixelSize;
   p *= ps;
   vec2 id = floor(p);
   float x = id.x * 1.0 / ps;
