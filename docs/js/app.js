@@ -13,8 +13,8 @@ const FPS = 30;
 const frameTime = 1 / FPS;
 let prevTimestamp = 0;
 
-const vs = './shaders/vertex/main.js';
-const fs = './shaders/fragment/main.js';
+const vs = './shaders/vertex/vertexMain.js';
+const fs = './shaders/fragment/fragmentMain.js';
 const vertexPrimitive = await fetchShader(vs);
 const fragmentPrimitive = await fetchShader(fs);
 
