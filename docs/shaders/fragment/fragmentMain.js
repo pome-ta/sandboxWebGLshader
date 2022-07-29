@@ -40,7 +40,7 @@ vec4 raymarch(vec3 org, vec3 dir) {
   vec3 p = org;
   bool glowed = false;
 
-  for(int i=0; i<64; i++) {
+  for(int i=0; i<128; i++) {
     d = scene(p) + eps;
     p += d * dir;
     if(d > eps) {
@@ -57,17 +57,18 @@ vec4 raymarch(vec3 org, vec3 dir) {
 
 
 void main(void) {
-  // vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
-  vec2 v = -1.0 + 2.0 * gl_FragCoord.xy / resolution.xy;
-  v.x *= resolution.x / resolution.y;
+  vec2 uv = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
+  //vec2 v = -1.0 + 2.0 * gl_FragCoord.xy / resolution.xy;
+  //v.x *= resolution.x / resolution.y;
 
   vec3 org = vec3(0.0, -2.0, 4.0);
-  vec3 dir = normalize(vec3(v.x * 1.6, -v.y, -1.5));
+  //vec3 org = vec3(0.0, -mouse.y, mouse.x);
+  vec3 dir = normalize(vec3(uv.x * 1.6, -uv.y, -1.5));
 
   vec4 p = raymarch(org, dir);
-float glow = p.w;
+  float glow = p.w;
 
-vec4 col = mix(vec4(1.0, 0.5, 0.1, 1.0), vec4(0.1, 0.5, 1.0, 1.0), p.y * 0.02 + 0.4);
+  vec4 col = mix(vec4(1.0, 0.5, 0.1, 1.0), vec4(0.1, 0.5, 1.0, 1.0), p.y * 0.02 + 0.4);
   //fragmentColor = mix(vec4(0.0), col, pow(glow * 2.0, 4.0));
   fragmentColor = mix(vec4(1.0), mix(vec4(1.0, 0.5, 0.1, 1.0), vec4(0.1, 0.5, 1.0, 1.0), p.y * 0.02 + 0.4), pow(glow * 2.0, 4.0));
 }
