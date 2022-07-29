@@ -180,8 +180,13 @@ function render(timestamp) {
     return;
   }
   prevTimestamp = timestamp;
-  time += isPlaying ? frameTime : 0;
   
+  if (!isPlaying) {
+    requestAnimationFrame(render);
+    return;
+  }
+  
+  time += frameTime;
   // カラーバッファをクリア
   gl.clear(gl.COLOR_BUFFER_BIT);
   // uniform 関連
