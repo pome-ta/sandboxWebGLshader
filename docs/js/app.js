@@ -8,7 +8,7 @@ let mouseX = 0.5;
 let mouseY = 0.5;
 let canvasW, canvasH;
 
-let isPlaying = 1;
+let isPlaying = 0;
 const switchPlayPause = ['Play', 'Pause'];
 let playPauseButton;
 
@@ -173,20 +173,7 @@ function create_ibo(data) {
   return ibo;
 }
 
-function render(timestamp) {
-  const elapsed = (timestamp - prevTimestamp) / 1000;
-  if (elapsed <= frameTime) {
-    requestAnimationFrame(render);
-    return;
-  }
-  prevTimestamp = timestamp;
-  
-  if (!isPlaying) {
-    requestAnimationFrame(render);
-    return;
-  }
-  
-  time += frameTime;
+function glRender(time) {
   // カラーバッファをクリア
   gl.clear(gl.COLOR_BUFFER_BIT);
   // uniform 関連
@@ -196,16 +183,33 @@ function render(timestamp) {
   // 描画
   gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
   gl.flush();
+}
 
+function loop(timestamp) {
+  const elapsed = (timestamp - prevTimestamp) / 1000;
+  if (elapsed <= frameTime) {
+    requestAnimationFrame(loop);
+    return;
+  }
+  prevTimestamp = timestamp;
+
+  if (!isPlaying) {
+    requestAnimationFrame(loop);
+    return;
+  }
+
+  time += frameTime;
+  glRender(time);
   // 再帰
-  requestAnimationFrame(render);
+  requestAnimationFrame(loop);
 }
 
 createCanvas();
 createPlayPuseButton();
 initCanvasSize();
 initShader();
-render();
+glRender(time);
+loop();
 
 playPauseButton.addEventListener('click', checkChange);
 
