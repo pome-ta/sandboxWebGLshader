@@ -13,7 +13,7 @@ const switchPlayPause = ['Play', 'Pause'];
 let playPauseButton;
 
 let time = 0.0;
-const FPS = 60;
+const FPS = 120;
 const frameTime = 1 / FPS;
 let prevTimestamp = 0;
 
@@ -178,7 +178,9 @@ function render(timestamp) {
     requestAnimationFrame(render);
     return;
   }
-  time = isPlaying ? elapsed : time;
+  prevTimestamp = timestamp;
+  time += isPlaying ? frameTime : 0;
+  
   // カラーバッファをクリア
   gl.clear(gl.COLOR_BUFFER_BIT);
   // uniform 関連
