@@ -40,7 +40,7 @@ vec4 raymarch(vec3 org, vec3 dir) {
   vec3 p = org;
   bool glowed = false;
 
-  for(int i=0; i<128; i++) {
+  for(int i=0; i<64; i++) {
     d = scene(p) + eps;
     p += d * dir;
     if(d > eps) {
@@ -69,7 +69,8 @@ void main(void) {
   float glow = p.w;
 
   vec4 col = mix(vec4(1.0, 0.5, 0.1, 1.0), vec4(0.1, 0.5, 1.0, 1.0), p.y * 0.02 + 0.4);
-  //fragmentColor = mix(vec4(0.0), col, pow(glow * 2.0, 4.0));
-  fragmentColor = mix(vec4(1.0), mix(vec4(1.0, 0.5, 0.1, 1.0), vec4(0.1, 0.5, 1.0, 1.0), p.y * 0.02 + 0.4), pow(glow * 2.0, 4.0));
+  fragmentColor = mix(vec4(0.0), col, pow(glow * 2.0, 4.0));
+  //fragmentColor = mix(vec4(1.0), mix(vec4(1.0, 0.5, 0.1, 1.0), vec4(0.1, 0.5, 1.0, 1.0), p.y * 0.02 + 0.4), pow(glow * 2.0, 4.0));
+  
 }
 

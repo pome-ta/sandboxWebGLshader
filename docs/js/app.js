@@ -29,7 +29,8 @@ async function fetchShader(path) {
 }
 
 function createCanvas() {
-  document.body.style.backgroundColor = 'dimgray';
+  //document.body.style.backgroundColor = 'dimgray';
+  document.body.style.backgroundColor = '#232323';
   canvasDiv = document.createElement('div');
   cxtCanvas = document.createElement('canvas');
   canvasDiv.appendChild(cxtCanvas);
