@@ -23,7 +23,8 @@ void main(void) {
   vec3 cameraUp  = vec3(0.0, 1.0, 0.0);
   vec3 cameraSide = cross(cameraDir, cameraUp);
   
-  float targetDepth = 1.0;
+  //float targetDepth = 1.0;
+  float targetDepth = abs(sin(time));
   
   /* ray */
   vec3 ray = normalize(cameraSide * p.x
@@ -37,7 +38,7 @@ void main(void) {
   float rLen = 0.0;
   // レイの先端位置
   vec3  rPos = cameraPos;
-  for(int i = 0; i < 64; i++) {
+  for(int i = 0; i < 16; i++) {
     distance = distanceFunc(rPos);
     rLen += distance;
     rPos = cameraPos + ray * rLen;
@@ -45,7 +46,7 @@ void main(void) {
     
   /* hit check */
   vec4 outColor;
-  if(abs(distance) < 0.01) {
+  if(abs(distance) < 0.001) {
     outColor = vec4(vec3(1.0), 1.0);
   } else {
     outColor = vec4(vec3(0.0), 1.0);
