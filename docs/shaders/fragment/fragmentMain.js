@@ -8,14 +8,49 @@ uniform vec2 mouse;
 out vec4 fragmentColor;
 
 
+const float sphereSize = 1.0;
+
+float distanceFunc(vec3 p) {
+  return length(p) - sphereSize;
+}
 
 void main(void) {
-  //vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
+  vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
   
-  vec2 uv = gl_FragCoord.xy / resolution;
+  /* camera */
+  vec3 cameraPos = vec3(0.0, 0.0, 2.0);
+  vec3 cameraDir = vec3(0.0, 0.0, -1.0);
+  vec3 cameraUp  = vec3(0.0, 1.0, 0.0);
+  vec3 cameraSide = cross(cameraDir, cameraUp);
   
-  //vec4 outColor = vec4(uv, 0.5, 1.0);
-  vec4 outColor = vec4(uv, pow(sin(time), 2.0), 1.0);
+  float targetDepth = 1.0;
+  
+  /* ray */
+  vec3 ray = normalize(cameraSide * p.x
+                     + cameraUp * p.y
+                     + cameraDir * targetDepth);
+ 
+  /* marching loop */
+  // レイとオブジェクト間の最短距離
+  float distance = 0.0;
+  // レイに継ぎ足す長さ
+  float rLen = 0.0;
+  // レイの先端位置
+  vec3  rPos = cameraPos;
+  for(int i = 0; i < 64; i++) {
+    distance = distanceFunc(rPos);
+    rLen += distance;
+    rPos = cameraPos + ray * rLen;
+  }
+    
+  /* hit check */
+  vec4 outColor;
+  if(abs(distance) < 0.01) {
+    outColor = vec4(vec3(1.0), 1.0);
+  } else {
+    outColor = vec4(vec3(0.0), 1.0);
+  }
+  
   fragmentColor = outColor;
 }
 
