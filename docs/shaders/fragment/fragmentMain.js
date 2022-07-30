@@ -20,11 +20,13 @@ void main(void) {
   /* camera */
   vec3 cameraPos = vec3(0.0, 0.0, 2.0);
   vec3 cameraDir = vec3(0.0, 0.0, -1.0);
+  //vec3 cameraDir = vec3(0.0, 0.0, sin(time));
   vec3 cameraUp  = vec3(0.0, 1.0, 0.0);
+  //vec3 cameraUp  = vec3(0.0, abs(sin(time)), 0.0);
   vec3 cameraSide = cross(cameraDir, cameraUp);
   
-  //float targetDepth = 1.0;
-  float targetDepth = abs(sin(time));
+  float targetDepth = 1.0;
+  //float targetDepth = abs(sin(time));
   
   /* ray */
   vec3 ray = normalize(cameraSide * p.x
@@ -47,7 +49,7 @@ void main(void) {
   /* hit check */
   vec4 outColor;
   if(abs(distance) < 0.001) {
-    outColor = vec4(vec3(1.0), 1.0);
+    outColor = vec4(vec3(rPos), 1.0);
   } else {
     outColor = vec4(vec3(0.0), 1.0);
   }
