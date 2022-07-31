@@ -7,60 +7,63 @@ uniform vec2 mouse;
 
 out vec4 fragmentColor;
 
+const vec3 camPos = vec3(0.0, 0.0, 3.0);
+const vec3 camDir = vec3(0.0, 0.0, -1.0);
+const vec3 camUp = vec3(0.0, 1.0, 0.0);
 
+const vec3 lightDir = vec3(-0.57, 0.57, 0.57);
 
-const float PI = acos(-1.0);
-const float angle = 90.0;
-const float fov = angle * 0.5 * PI / 180.0;
-
-const float sphereSize = 1.0;
-const vec3 lightDir = vec3(-0.577, 0.577, 0.577);
-
-float distanceFunc(vec3 p) {
-  return length(p) - sphereSize;
+float distFuncTorus(vec3 p) {
+  vec2 t = vec2(0.75, 0.25);
+  vec2 r = vec2(length(p.xy) - t.x, p.z);
+  // vec2 r = vec2(length(p.xz) - t.x, p.y);
+  return length(r) - t.y;
 }
 
-vec3 getNormal(vec3 p) {
-  float d = 0.00001;
+float distFuncFloor(vec3 p) {
+  return dot(p, vec3(0.0, 1.0, 0.0)) + 1.0;
+}
+
+float distFunc(vec3 p) {
+  float d1 = distFuncTorus(p);
+  float d2 = distFuncFloor(p);
+  return min(d1, d2);
+}
+
+vec3 genNormal(vec3 p) {
+  float d = 0.0001;
   return normalize(vec3(
-    distanceFunc(p + vec3(  d, 0.0, 0.0)) - distanceFunc(p + vec3( -d, 0.0, 0.0)),
-    distanceFunc(p + vec3(0.0,   d, 0.0)) - distanceFunc(p + vec3(0.0,  -d, 0.0)),
-    distanceFunc(p + vec3(0.0, 0.0,   d)) - distanceFunc(p + vec3(0.0, 0.0,  -d))
+    distFunc(p + vec3(d, 0.0, 0.0)) - distFunc(p + vec3(-d, 0.0, 0.0)),
+    distFunc(p + vec3(0.0, d, 0.0)) - distFunc(p + vec3(0.0, -d, 0.0)),
+    distFunc(p + vec3(0.0, 0.0, d)) - distFunc(p + vec3(0.0, 0.0, -d))
   ));
 }
 
 
-void main(void) {
+void main() {
   vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
-  
-  /* camera */
-  vec3 cameraPos = vec3(0.0, 0.0, 2.0);
-  
-  /* ray */
-  //vec3 ray = normalize(cameraSide * p.x + cameraUp * p.y + cameraDir * targetDepth);
-  vec3 ray = normalize(vec3(sin(fov) * p.x, sin(fov) * p.y, -cos(fov)));
- 
-  /* marching loop */
-  float distance = 0.0;  // レイとオブジェクト間の最短距離
-  float rayAddLength = 0.0;  // レイに継ぎ足す長さ
-  vec3 rayPos = cameraPos;  // レイの先端位置
-  
-  for(int i = 0; i < 16; i++) {
-    distance = distanceFunc(rayPos);
-    rayAddLength += distance;
-    rayPos = cameraPos + ray * rayAddLength;
-  }
-    
-  /* hit check */
-  vec4 outColor;
-  if(abs(distance) < 0.001) {
-    vec3 normal = getNormal(rayPos);
-    float diff = clamp(dot(lightDir, normal), 0.1, 1.0);
-    outColor = vec4(vec3(normal), 1.0);
-  } else {
-    outColor = vec4(vec3(0.0), 1.0);
-  }
-  
-  fragmentColor = outColor;
-}
 
+  vec3 camSide = cross(camDir, camUp);
+  float targetDepth = 1.0;
+  vec3 ray = normalize(camSide * p.x + camUp * p.y + camDir * targetDepth);
+
+  /* marching loop */
+  float tmp, dist;
+  tmp = 0.0;
+  vec3 disPos = camPos;
+  for (int i = 0; i < 512; i++) {
+    dist = distFunc(disPos);
+    tmp += dist;
+    disPos = camPos + tmp * ray;
+  }
+
+  /* hit check */
+  vec3 color = vec3(0.0);
+  if (abs(dist) < 0.001) {
+    vec3 normal = genNormal(disPos);
+    float diff = clamp(dot(lightDir, normal), 0.1, 1.0);
+    color = vec3(1.0, 1.0, 1.0) * diff;
+  } 
+
+  fragmentColor = vec4(color, 1.0);
+}
