@@ -7,15 +7,15 @@ uniform vec2 mouse;
 
 out vec4 fragmentColor;
 
-const vec3 camPos = vec3(0.0, 5.0, 5.0);
-const vec3 camDir = vec3(0.0, -0.707, -0.707);
-const vec3 camUp = vec3(0.0, 0.707, -0.707);
+const vec3 camPos = vec3(0.0, 0.0, 3.0);
+const vec3 camDir = vec3(0.0, 0.0, -1.0);
+const vec3 camUp = vec3(0.0, 1.0, 0.0);
 
 const vec3 lightDir = vec3(-0.57, 0.57, 0.57);
 
 float distFuncTorus(vec3 p) {
-  vec2 t = vec2(3.0, 1.0);
-  vec2 r = vec2(length(p.xz) - t.x, p.y);
+  vec2 t = vec2(0.75, 0.25);
+  vec2 r = vec2(length(p.xy) - t.x, p.z);
   // vec2 r = vec2(length(p.xz) - t.x, p.y);
   return length(r) - t.y;
 }
@@ -51,9 +51,8 @@ void main() {
   float tmp, dist;
   tmp = 0.0;
   vec3 disPos = camPos;
-  for (int i = 0; i < 256; i++) {
+  for (int i = 0; i < 512; i++) {
     dist = distFunc(disPos);
-    if (dist < 0.001){ break; }
     tmp += dist;
     disPos = camPos + tmp * ray;
   }
@@ -61,19 +60,10 @@ void main() {
   /* hit check */
   vec3 color = vec3(0.0);
   if (abs(dist) < 0.001) {
-    /* generate normal */
     vec3 normal = genNormal(disPos);
     float diff = clamp(dot(lightDir, normal), 0.1, 1.0);
-    
-    /* generate tile pattern */
-    float u = 1.0 - floor(mod(disPos.x, 2.0));
-    float v = 1.0 - floor(mod(disPos.z, 2.0));
-    if ((u == 1.0 && v < 1.0) || (u < 1.0 && v == 1.0)) {
-      diff *= 0.1;
-    }
     color = vec3(1.0, 1.0, 1.0) * diff;
-    //color = vec3(1.0, 1.0, 1.0) * normal;
-  }
+  } 
 
   fragmentColor = vec4(color, 1.0);
 }
