@@ -66,10 +66,11 @@ void main() {
     float diff = clamp(dot(lightDir, normal), 0.1, 1.0);
     
     /* generate tile pattern */
+    //float u = 1.0 - floor(mod(disPos.x, 2.0));
     float u = 1.0 - floor(mod(disPos.x, 2.0));
     float v = 1.0 - floor(mod(disPos.z, 2.0));
     if ((u == 1.0 && v < 1.0) || (u < 1.0 && v == 1.0)) {
-      diff *= 0.1;
+      diff *= 0.64;
     }
     color = vec3(1.0, 1.0, 1.0) * diff;
     //color = vec3(1.0, 1.0, 1.0) * normal;
