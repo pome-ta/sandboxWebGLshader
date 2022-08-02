@@ -14,6 +14,7 @@ const vec3 camUp = vec3(0.0, 0.707, -0.707);
 const vec3 lightDir = vec3(-0.57, 0.57, 0.57);
 
 float distFuncTorus(vec3 p) {
+  p.xz -= mouse * 2.0 - 1.0;
   vec2 t = vec2(3.0, 1.0);
   vec2 r = vec2(length(p.xz) - t.x, p.y);
   // vec2 r = vec2(length(p.xz) - t.x, p.y);
@@ -38,6 +39,23 @@ vec3 genNormal(vec3 p) {
     distFunc(p + vec3(0.0, 0.0, d)) - distFunc(p + vec3(0.0, 0.0, -d))
   ));
 }
+
+float genShadow(vec3 ro, vec3 rd) {
+  float h = 0.0;
+  float c = 0.001;
+  float r = 1.0;
+  float shadowCoef = 0.5;
+  for (float t = 0.0; t < 50.0; t++) {
+    h = distFunc(ro + rd * c);
+    if (h < 0.001) {
+      return shadowCoef;
+    }
+    r = min(r, h * 16.0 / c);
+    c += h;
+  }
+  return mix(shadowCoef, 1.0, r);
+}
+
 
 
 void main() {
@@ -72,6 +90,9 @@ void main() {
     vec3 halfLE = normalize(light - ray);
     float diff = clamp(dot(light, normal), 0.1, 1.0);
     float spec = pow(clamp(dot(halfLE, normal), 0.0, 1.0), 50.0);
+    
+    /* generate shadow */
+    shadow = genShadow(disPos + normal * 0.001, light);
     
     /* generate tile pattern */
     //float u = 1.0 - floor(mod(disPos.x, 2.0));
