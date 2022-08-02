@@ -7,7 +7,7 @@ uniform vec2 mouse;
 
 out vec4 fragmentColor;
 
-const vec3 camPos = vec3(0.0, 5.0, 5.0);
+const vec3 camPos = vec3(0.0, 4.0, 7.0);
 const vec3 camDir = vec3(0.0, -0.707, -0.707);
 const vec3 camUp = vec3(0.0, 0.707, -0.707);
 
@@ -51,30 +51,39 @@ void main() {
   float tmp, dist;
   tmp = 0.0;
   vec3 disPos = camPos;
-  for (int i = 0; i < 128; i++) {
+  for (int i = 0; i < 256; i++) {
     dist = distFunc(disPos);
     if (dist < 0.001){ break; }
     tmp += dist;
     disPos = camPos + tmp * ray;
   }
 
+  /* light offset */
+  vec3 light = normalize(lightDir + vec3(sin(time), 0.0, 0.0));
+
   /* hit check */
   vec3 color = vec3(0.0);
+  float shadow = 1.0;
   if (abs(dist) < 0.001) {
     /* generate normal */
     vec3 normal = genNormal(disPos);
-    float diff = clamp(dot(lightDir, normal), 0.1, 1.0);
+    
+    /* light */
+    vec3 halfLE = normalize(light - ray);
+    float diff = clamp(dot(light, normal), 0.1, 1.0);
+    float spec = pow(clamp(dot(halfLE, normal), 0.0, 1.0), 50.0);
     
     /* generate tile pattern */
     //float u = 1.0 - floor(mod(disPos.x, 2.0));
     float u = 1.0 - floor(mod(disPos.x, 2.0));
     float v = 1.0 - floor(mod(disPos.z, 2.0));
     if ((u == 1.0 && v < 1.0) || (u < 1.0 && v == 1.0)) {
-      diff *= 0.64;
+      diff *= 0.7;
     }
-    color = vec3(1.0, 1.0, 1.0) * diff;
+    color = vec3(1.0, 1.0, 1.0) * diff + vec3(spec);
     //color = vec3(1.0, 1.0, 1.0) * normal;
   }
+  vec3 outColor = vec3(color * max(0.5, shadow));
 
-  fragmentColor = vec4(color, 1.0);
+  fragmentColor = vec4(outColor, 1.0);
 }
