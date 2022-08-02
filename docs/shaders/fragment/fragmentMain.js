@@ -51,7 +51,7 @@ void main() {
   float tmp, dist;
   tmp = 0.0;
   vec3 disPos = camPos;
-  for (int i = 0; i < 256; i++) {
+  for (int i = 0; i < 128; i++) {
     dist = distFunc(disPos);
     if (dist < 0.001){ break; }
     tmp += dist;
