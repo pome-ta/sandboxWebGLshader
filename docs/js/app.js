@@ -82,6 +82,8 @@ function initShader() {
 
   const VERTEX_SIZE = 3; // vec3
 
+  gl.viewport(0, 0, canvasW, canvasH);
+
   gl.bindBuffer(gl.ARRAY_BUFFER, vPosition);
   gl.enableVertexAttribArray(vAttLocation);
   gl.vertexAttribPointer(vAttLocation, VERTEX_SIZE, gl.FLOAT, false, 0, 0);
