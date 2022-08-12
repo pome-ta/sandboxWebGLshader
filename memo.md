@@ -5,6 +5,11 @@
 
 [WebGL入門 (2) シェーダーを使用する｜まくろぐ](https://maku.blog/p/8s4uhzv/)
 
+## 描画サイズ
+
+`gl.viewport(0, 0, canvasW, canvasH);` でいけるかな？
+
+
 
 # 📝 2022/07/31
 
