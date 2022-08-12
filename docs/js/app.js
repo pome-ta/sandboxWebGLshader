@@ -126,9 +126,14 @@ function create_shader(type, text) {
 function create_program(vs, fs) {
   // プログラムオブジェクトの生成
   const program = gl.createProgram();
+  if (!program) {
+    return null;
+  }
   // プログラムオブジェクトにシェーダを割り当てる
   gl.attachShader(program, vs);
+  gl.deleteShader(vs);
   gl.attachShader(program, fs);
+  gl.deleteShader(fs);
   // シェーダをリンク
   gl.linkProgram(program);
   // シェーダのリンクが正しく行なわれたかチェック
