@@ -8,7 +8,7 @@ let mouseX = 0.5;
 let mouseY = 0.5;
 let canvasW, canvasH;
 
-let isPlaying = 0;
+let isPlaying = 1;
 const switchPlayPause = ['Play', 'Pause'];
 let playPauseButton;
 
