@@ -2,12 +2,9 @@
 
 [doxas/twigl: twigl.app is an online editor for One tweet shader, with gif generator and sound shader, and broadcast live coding.](https://github.com/doxas/twigl)
 
-
-の、感じでいく
-
+のベースから削っていく
 
 # 📝 2022/08/12
-
 
 ## 更新可能にする？
 
@@ -16,8 +13,6 @@
 ## 描画サイズ
 
 `gl.viewport(0, 0, canvasW, canvasH);` でいけるかな？
-
-
 
 # 📝 2022/07/31
 
