@@ -614,6 +614,7 @@ void main(){
    * set rect
    */
   rect() {
+    // todo: `getBoundingClientRect` スクロール相対位置
     const bound = this.target.getBoundingClientRect();
     this.width = bound.width;
     this.height = bound.height;
