@@ -614,7 +614,7 @@ void main(){
    * set rect
    */
   rect() {
-    // todo: `getBoundingClientRect` スクロール相対位置
+    // todo: `getBoundingClientRect` ブラウザの表示領域の左上を(0, 0)としての相対位置
     const bound = this.target.getBoundingClientRect();
     this.width = bound.width;
     this.height = bound.height;
