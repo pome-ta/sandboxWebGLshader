@@ -10,9 +10,10 @@ function createCanvas() {
   canvasDiv.appendChild(cxtCanvas);
   document.body.appendChild(canvasDiv);
   canvasDiv.style.width = '100%';
-  //canvasDiv.style.height = '100%';
+  canvasDiv.style.height = '100%';
   cxtCanvas.style.width = '100%';
-  //cxtCanvas.style.height = '100%';
+  cxtCanvas.style.width = '50%';
+  cxtCanvas.style.height = '100%';
   //cxtCanvas.style.height = 'auto';
 }
 
