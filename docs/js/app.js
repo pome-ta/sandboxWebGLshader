@@ -36,7 +36,9 @@ function createCanvas() {
   canvasDiv.appendChild(cxtCanvas);
   document.body.appendChild(canvasDiv);
   canvasDiv.style.width = '100%';
+  canvasDiv.style.height = '100%';
   cxtCanvas.style.width = '100%';
+  cxtCanvas.style.height = '100%';
 }
 
 function createPlayPuseButton() {
@@ -48,7 +50,7 @@ function createPlayPuseButton() {
   const playPauseSection = document.createElement('section');
   playPauseSection.style.width = '100%';
   playPauseSection.appendChild(playPauseButton);
-  document.body.appendChild(playPauseSection);
+  //document.body.appendChild(playPauseSection);
 }
 
 function initCanvasSize() {
