@@ -39,8 +39,16 @@ currentSource = fragmenDefaultSource[currentMode];
 // メインとなる fragmen のインスタンス
 const option = Object.assign(FRAGMEN_OPTION, {
   target: cxtCanvas,
+  //target: canvasDiv,
   eventTarget: window,
 });
 const fragmen = new Fragmen(option);
+//const fragmen = new Fragmen();
 fragmen.mode = currentMode;
 fragmen.render(currentSource);
+
+//canvasDiv.addEventListener('touchmove', (event) => {
+cxtCanvas.addEventListener('touchmove', (event) => {
+  event.preventDefault();
+  console.log(fragmen.mousePosition)
+});

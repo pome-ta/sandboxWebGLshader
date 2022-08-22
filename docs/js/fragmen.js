@@ -464,6 +464,7 @@ ${noise}\n`;
   init(option) {
     // option check
     if (option === null || option === undefined) {
+      console.error(`option is null or undefined: ${option}`);
       return;
     }
     if (
@@ -617,7 +618,6 @@ void main(){
    * set rect
    */
   rect() {
-    // todo: `getBoundingClientRect` ブラウザの表示領域の左上を(0, 0)としての相対位置
     const bound = this.target.getBoundingClientRect();
     this.width = bound.width;
     this.height = bound.height;
