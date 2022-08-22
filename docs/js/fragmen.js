@@ -1,10 +1,10 @@
 /**
  * [twigl/fragmen.js at master · doxas/twigl](https://github.com/doxas/twigl/blob/master/src/fragmen.js)
  */
- 
+
 // todo: 使わない予定
 //import noise from './shader_snippet/noise.glsl';
-import {noise} from './shader_snippet/noise_glsl.js';
+import { noise } from './shader_snippet/noise_glsl.js';
 
 // todo: GEEK は使わない？
 export class Fragmen {
