@@ -19,7 +19,7 @@ let prevTimestamp = 0;
 
 const vs = './shaders/vertex/vertexMain.js';
 const fs = './shaders/fragment/fragmentMain.js';
-/*
+
 const vertexPrimitive = await fetchShader(vs);
 const fragmentPrimitive = await fetchShader(fs);
 
@@ -28,7 +28,7 @@ async function fetchShader(path) {
   const shaderText = await res.text();
   return shaderText;
 }
-*/
+
 function createCanvas() {
   //document.body.style.backgroundColor = 'dimgray';
   document.body.style.backgroundColor = '#232323';
@@ -37,9 +37,9 @@ function createCanvas() {
   canvasDiv.appendChild(cxtCanvas);
   document.body.appendChild(canvasDiv);
   canvasDiv.style.width = '100%';
-  canvasDiv.style.height = '100%';
+  //canvasDiv.style.height = '100%';
   cxtCanvas.style.width = '100%';
-  cxtCanvas.style.height = '100%';
+  //cxtCanvas.style.height = '100%';
 }
 
 function createPlayPuseButton() {
@@ -217,9 +217,9 @@ function loop(timestamp) {
 createCanvas();
 createPlayPuseButton();
 initCanvasSize();
-//initShader();
-//glRender(time);
-//loop();
+initShader();
+glRender(time);
+loop();
 
 playPauseButton.addEventListener('click', checkChange);
 

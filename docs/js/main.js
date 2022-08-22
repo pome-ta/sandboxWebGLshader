@@ -10,9 +10,10 @@ function createCanvas() {
   canvasDiv.appendChild(cxtCanvas);
   document.body.appendChild(canvasDiv);
   canvasDiv.style.width = '100%';
-  canvasDiv.style.height = '100%';
+  //canvasDiv.style.height = '100%';
   cxtCanvas.style.width = '100%';
-  cxtCanvas.style.height = '100%';
+  //cxtCanvas.style.height = '100%';
+  //cxtCanvas.style.height = 'auto';
 }
 
 function initCanvasSize() {
@@ -20,6 +21,7 @@ function initCanvasSize() {
   const oneSide = canvasDiv.clientWidth;
   cxtCanvas.width = oneSide;
   cxtCanvas.height = oneSide;
+  //cxtCanvas.height = canvasDiv.clientWidth;
   //canvasW = cxtCanvas.width;
   //canvasH = cxtCanvas.height;
 }
