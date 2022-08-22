@@ -8,6 +8,19 @@
 
 [wgld.org | WebGL: MRT(Multiple render targets) |](https://wgld.org/d/webgl/w084.html)
 
+
+
+## `div` -> `canvas` サイズが気持ち悪い件
+
+``` .js
+cxtCanvas.addEventListener('touchmove', (event) => {
+  event.preventDefault();
+});
+```
+
+
+
+
 ## todo 2022/08/22
 
 - mode を`enum` で書く？

@@ -19,6 +19,7 @@ let prevTimestamp = 0;
 
 const vs = './shaders/vertex/vertexMain.js';
 const fs = './shaders/fragment/fragmentMain.js';
+/*
 const vertexPrimitive = await fetchShader(vs);
 const fragmentPrimitive = await fetchShader(fs);
 
@@ -27,7 +28,7 @@ async function fetchShader(path) {
   const shaderText = await res.text();
   return shaderText;
 }
-
+*/
 function createCanvas() {
   //document.body.style.backgroundColor = 'dimgray';
   document.body.style.backgroundColor = '#232323';
@@ -216,9 +217,9 @@ function loop(timestamp) {
 createCanvas();
 createPlayPuseButton();
 initCanvasSize();
-initShader();
-glRender(time);
-loop();
+//initShader();
+//glRender(time);
+//loop();
 
 playPauseButton.addEventListener('click', checkChange);
 
@@ -237,3 +238,4 @@ function moveInteractive(event) {
   mouseX = event.offsetX / canvasW;
   mouseY = event.offsetY / canvasH;
 }
+

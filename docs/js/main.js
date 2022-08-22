@@ -1,17 +1,31 @@
 import { Fragmen } from './fragmen.js';
 
-const canvasDiv = document.createElement('div');
-const cxtCanvas = document.createElement('canvas');
-//canvasDiv.style.width = '100%';
-//canvasDiv.style.height = '100%';
-// canvasDiv.style.height = `${document.documentElement.clientHeight}px`;
-// cxtCanvas.width = `${document.documentElement.clientWidth}px`;
-// cxtCanvas.height = `${document.documentElement.clientHeight}px`;
-//cxtCanvas.style.width = '100%';
-//cxtCanvas.style.height = '100%';
+let canvasDiv, cxtCanvas;
 
-canvasDiv.appendChild(cxtCanvas);
-document.body.appendChild(canvasDiv);
+function createCanvas() {
+  //document.body.style.backgroundColor = 'dimgray';
+  //document.body.style.backgroundColor = '#232323';
+  canvasDiv = document.createElement('div');
+  cxtCanvas = document.createElement('canvas');
+  canvasDiv.appendChild(cxtCanvas);
+  document.body.appendChild(canvasDiv);
+  canvasDiv.style.width = '100%';
+  canvasDiv.style.height = '100%';
+  cxtCanvas.style.width = '100%';
+  cxtCanvas.style.height = '100%';
+}
+
+function initCanvasSize() {
+  // const oneSide = Math.min(canvasDiv.clientWidth, canvasDiv.clientHeight);
+  const oneSide = canvasDiv.clientWidth;
+  cxtCanvas.width = oneSide;
+  cxtCanvas.height = oneSide;
+  //canvasW = cxtCanvas.width;
+  //canvasH = cxtCanvas.height;
+}
+
+createCanvas();
+initCanvasSize();
 
 let currentMode = Fragmen.MODE_CLASSIC; // 現在の Fragmen モード
 let currentSource = ''; // 直近のソースコード
@@ -37,6 +51,11 @@ const fragmen = new Fragmen(option);
 fragmen.mode = currentMode;
 fragmen.render(currentSource);
 
+cxtCanvas.addEventListener('touchmove', (event) => {
+  event.preventDefault();
+});
+
+/*
 window.addEventListener('DOMContentLoaded', () => {
   // cxtCanvas.width = `${canvasDiv.clientWidth}`;
   // cxtCanvas.height = `${canvasDiv.clientHeight}`;
@@ -45,11 +64,13 @@ window.addEventListener('DOMContentLoaded', () => {
 //canvasDiv.style.height = `${document.documentElement.clientHeight}px`;
 cxtCanvas.width = `${canvasDiv.clientWidth}px`;
 cxtCanvas.height = `${canvasDiv.clientHeight}px`;
-cxtCanvas.style.width = `${canvasDiv.clientWidth}px`;
-cxtCanvas.style.height = `${canvasDiv.clientHeight}px`;
+//cxtCanvas.style.width = `${canvasDiv.clientWidth}px`;
+//cxtCanvas.style.height = `${canvasDiv.clientHeight}px`;
 //fragmen.render(currentSource);
 });
 window.addEventListener('resize', () => {
   // cxtCanvas.width = `${canvasDiv.clientWidth}`;
   // cxtCanvas.height = `${canvasDiv.clientHeight}`;
 });
+
+*/
