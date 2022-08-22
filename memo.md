@@ -5,6 +5,9 @@
 のベースから削っていく
 
 
+
+[wgld.org | WebGL: MRT(Multiple render targets) |](https://wgld.org/d/webgl/w084.html)
+
 ## todo 2022/08/22
 
 - mode を`enum` で書く？

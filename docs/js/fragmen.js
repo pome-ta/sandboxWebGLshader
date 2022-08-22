@@ -1,9 +1,12 @@
 /**
  * [twigl/fragmen.js at master · doxas/twigl](https://github.com/doxas/twigl/blob/master/src/fragmen.js)
  */
+ 
+// todo: 使わない予定
+//import noise from './shader_snippet/noise.glsl';
+import {noise} from './shader_snippet/noise_glsl.js';
 
-import noise from './shader_snippet/noise.glsl';
-
+// todo: GEEK は使わない？
 export class Fragmen {
   /**
    * ES 3.0 専用モードの一覧
@@ -1145,6 +1148,7 @@ void main(){
    * @param {string} source - 対象となる頂点シェーダのソースコード
    */
   preprocessVertexCode(source) {
+    // todo: 300es にするから直で処理？
     switch (this.mode) {
       case Fragmen.MODE_CLASSIC_300:
       case Fragmen.MODE_GEEK_300:
@@ -1166,6 +1170,7 @@ void main(){
    * @param {string} code - 対象となるフラグメントシェーダのソースコード
    */
   preprocessFragmentCode(code) {
+    // todo: 300es にするから直で処理？
     let chunk300 = '';
     let chunkOut = '';
     let chunkMain = '';
@@ -1235,6 +1240,7 @@ void main(){
    * @private
    */
   formatErrorMessage(message) {
+    // todo: 自作のものもに合わせる
     const code = this.FS;
     const mainFunction = code.match(/void\s+main\s*\(/) != null ? 1 : 0;
     let dec = 0;
