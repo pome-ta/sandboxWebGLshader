@@ -1285,10 +1285,11 @@ void main(){
  */
 function getTimeString() {
   const d = new Date();
-  console.log(d)
-  const h = (new Array(2).join('0') + d.getHours()).substr(-2, 2);
-  const m = (new Array(2).join('0') + d.getMinutes()).substr(-2, 2);
-  return `${h}:${m}`;
+  const hh = d.getHours().toString(10).padStart(2, '0');
+  const mm = d.getMinutes().toString(10).padStart(2, '0');
+  const ss = d.getSeconds().toString(10).padStart(2, '0');
+
+  return `${hh}:${mm}:${ss}`;
 }
 /*
 function getTimeString() {
