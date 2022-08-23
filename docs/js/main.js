@@ -9,16 +9,22 @@ let wrapDiv, canvasDiv, cxtCanvas;
   document.body
     .appendChild(wrapDiv)
     .appendChild(canvasDiv)
-    .appendChild(cxtCanvas);
+    //.appendChild(cxtCanvas);
 
   wrapDiv.style.height = '100%';
+  //wrapDiv.style.width = '100%';
   canvasDiv.style.overflow = 'hidden';
   canvasDiv.style.height = '100%';
+  let { width, height } = wrapDiv.getBoundingClientRect();
+  canvasDiv.width = width;
+  canvasDiv.height = height;
+  //canvasDiv.style.width = '100%';
+  /*
   cxtCanvas.style.width = '100%';
   cxtCanvas.style.height = '100%';
   let { width, height } = wrapDiv.getBoundingClientRect();
   cxtCanvas.width = width;
-  canvasDiv.height = height;
+  canvasDiv.height = height;*/
 })();
 
 let currentMode = Fragmen.MODE_CLASSIC; // 現在の Fragmen モード
@@ -38,8 +44,8 @@ currentMode = Fragmen.MODE_CLASSIC;
 currentSource = fragmenDefaultSource[currentMode];
 // メインとなる fragmen のインスタンス
 const option = Object.assign(FRAGMEN_OPTION, {
-  target: cxtCanvas,
-  //target: canvasDiv,
+  //target: cxtCanvas,
+  target: canvasDiv,
   eventTarget: window,
 });
 const fragmen = new Fragmen(option);
@@ -47,8 +53,7 @@ const fragmen = new Fragmen(option);
 fragmen.mode = currentMode;
 fragmen.render(currentSource);
 
-//canvasDiv.addEventListener('touchmove', (event) => {
-cxtCanvas.addEventListener('touchmove', (event) => {
+canvasDiv.addEventListener('touchmove', (event) => {
+//cxtCanvas.addEventListener('touchmove', (event) => {
   event.preventDefault();
-  console.log(fragmen.mousePosition)
 });
