@@ -12,10 +12,11 @@ let wrapDiv, canvasDiv, message;
   document.body.appendChild(wrapDiv);
   wrapDiv.appendChild(canvasDiv);
   wrapDiv.appendChild(message);
-  
+
   wrapDiv.style.display = 'grid';
   wrapDiv.gridTemplateRows = 'auto 1fr';
 
+  message.style.fontFamily = 'monospace';
   message.textContent = ' ● ready';
   wrapDiv.style.height = '100%';
   canvasDiv.style.overflow = 'hidden';
