@@ -1,27 +1,30 @@
 import { Fragmen } from './fragmen.js';
 
-let wrapDiv, canvasDiv;
+let latestStatus = 'success';
+let wrapDiv, canvasDiv, message;
 
 (() => {
   wrapDiv = document.createElement('div');
   canvasDiv = document.createElement('div');
-  document.body.appendChild(wrapDiv)
-    .appendChild(canvasDiv);
+  message = document.createElement('div');
+  message.style.height = '2rem';
 
+  document.body.appendChild(wrapDiv);
+  wrapDiv.appendChild(canvasDiv);
+  wrapDiv.appendChild(message);
+  
+  wrapDiv.style.display = 'grid';
+  wrapDiv.gridTemplateRows = 'auto 1fr';
+
+  message.textContent = ' ● ready';
   wrapDiv.style.height = '100%';
   canvasDiv.style.overflow = 'hidden';
-  canvasDiv.style.height = '100%';
-  let { width, height } = wrapDiv.getBoundingClientRect();
-  // todo: fragmen mouseMove
+  //canvasDiv.style.height = '100%';
+  const { width, height } = wrapDiv.getBoundingClientRect();
+  // todo: setting fragmen glCanvas size
   canvasDiv.width = width;
   canvasDiv.height = height;
 })();
-
-
-const message = document.createElement('div');
-message.style.height = '2rem'
-message.textContent = ' ● ready';
-wrapDiv.appendChild(message)
 
 let currentMode = Fragmen.MODE_CLASSIC; // 現在の Fragmen モード
 let currentSource = ''; // 直近のソースコード
@@ -44,7 +47,10 @@ const option = Object.assign(FRAGMEN_OPTION, {
   eventTarget: window,
 });
 const fragmen = new Fragmen(option);
-//const fragmen = new Fragmen();
+fragmen.onBuild((status, msg) => {
+  message.textContent = msg;
+});
+
 fragmen.mode = currentMode;
 fragmen.render(currentSource);
 
