@@ -1,8 +1,15 @@
 import { Fragmen } from './fragmen.js';
 
-let latestStatus = 'success';
-let wrapDiv, canvasDiv, message;
+function createElements(tags) {
+  //const hoge = tags.map((tag) => document.createElement(tag))
+  return 
+}
 
+createElements()
+let latestStatus = 'success';
+const setTags = ['main', 'div', 'div'];
+//let [wrapDiv, canvasDiv, message] = createElements(setTags)
+let wrapDiv, canvasDiv, message;
 (() => {
   wrapDiv = document.createElement('main');
   canvasDiv = document.createElement('div');
