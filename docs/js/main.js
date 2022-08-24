@@ -10,14 +10,15 @@ const tagArray = ['main', 'div', 'div'];
 
 
 
-const [hoge, fuga, piyo] = createElements(tagArray)
-console.log(hoge)
+//const [wrapDiv, canvasDiv, message] = createElements(tagArray)
+//console.log(hoge)
 
 let wrapDiv, canvasDiv, message;
 (() => {
-  wrapDiv = document.createElement('main');
-  canvasDiv = document.createElement('div');
-  message = document.createElement('div');
+  //wrapDiv = document.createElement('main');
+  //canvasDiv = document.createElement('div');
+  //message = document.createElement('div');
+  [wrapDiv, canvasDiv, message] = createElements(tagArray)
   message.style.height = '2rem';
 
   document.body.appendChild(wrapDiv);
