@@ -1,14 +1,18 @@
 import { Fragmen } from './fragmen.js';
 
 function createElements(tags) {
-  //const hoge = tags.map((tag) => document.createElement(tag))
-  return 
+  return tags.map((tag) => document.createElement(tag))
 }
 
-createElements()
+
 let latestStatus = 'success';
-const setTags = ['main', 'div', 'div'];
-//let [wrapDiv, canvasDiv, message] = createElements(setTags)
+const tagArray = ['main', 'div', 'div'];
+
+
+
+const [hoge, fuga, piyo] = createElements(tagArray)
+console.log(hoge)
+
 let wrapDiv, canvasDiv, message;
 (() => {
   wrapDiv = document.createElement('main');
