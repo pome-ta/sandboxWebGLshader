@@ -4,11 +4,7 @@
 
 のベースから削っていく
 
-
-
 [wgld.org | WebGL: MRT(Multiple render targets) |](https://wgld.org/d/webgl/w084.html)
-
-
 
 ## `div` -> `canvas` サイズが気持ち悪い件
 
@@ -18,14 +14,9 @@ cxtCanvas.addEventListener('touchmove', (event) => {
 });
 ```
 
-
-
-
 ## todo 2022/08/22
 
 - mode を`enum` で書く？
-
-
 
 # 📝 2022/08/12
 

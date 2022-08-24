@@ -1,28 +1,18 @@
 import { Fragmen } from './fragmen.js';
 
 function createElements(tags) {
-  return tags.map((tag) => document.createElement(tag))
+  return tags.map((tag) => document.createElement(tag));
 }
-
 
 let latestStatus = 'success';
 const tagArray = ['main', 'div', 'div'];
 
-
-
-//const [wrapDiv, canvasDiv, message] = createElements(tagArray)
-//console.log(hoge)
-
 let wrapDiv, canvasDiv, message;
 (() => {
-  //wrapDiv = document.createElement('main');
-  //canvasDiv = document.createElement('div');
-  //message = document.createElement('div');
-  [wrapDiv, canvasDiv, message] = createElements(tagArray)
+  [wrapDiv, canvasDiv, message] = createElements(tagArray);
   message.style.height = '2rem';
 
   document.body.appendChild(wrapDiv);
-
   wrapDiv.appendChild(canvasDiv);
   wrapDiv.appendChild(message);
 
@@ -35,9 +25,8 @@ let wrapDiv, canvasDiv, message;
   canvasDiv.style.overflow = 'hidden';
   canvasDiv.style.height = '100%';
 
-  const { width, height } = wrapDiv.getBoundingClientRect();
-
   // todo: setting fragmen glCanvas size
+  const { width, height } = wrapDiv.getBoundingClientRect();
   canvasDiv.width = width;
   canvasDiv.height = height;
 })();
