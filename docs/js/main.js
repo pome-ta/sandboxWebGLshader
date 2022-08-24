@@ -4,12 +4,13 @@ let latestStatus = 'success';
 let wrapDiv, canvasDiv, message;
 
 (() => {
-  wrapDiv = document.createElement('div');
+  wrapDiv = document.createElement('main');
   canvasDiv = document.createElement('div');
   message = document.createElement('div');
   message.style.height = '2rem';
 
   document.body.appendChild(wrapDiv);
+
   wrapDiv.appendChild(canvasDiv);
   wrapDiv.appendChild(message);
 
@@ -20,8 +21,10 @@ let wrapDiv, canvasDiv, message;
   message.textContent = ' ● ready';
   wrapDiv.style.height = '100%';
   canvasDiv.style.overflow = 'hidden';
-  //canvasDiv.style.height = '100%';
+  canvasDiv.style.height = '100%';
+
   const { width, height } = wrapDiv.getBoundingClientRect();
+
   // todo: setting fragmen glCanvas size
   canvasDiv.width = width;
   canvasDiv.height = height;
