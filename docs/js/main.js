@@ -1,5 +1,7 @@
 import { Fragmen } from './fragmen.js';
+import { wrapDiv, canvasDiv, message, modeSelect, editor } from './setDOM.js';
 
+/*
 function createElements(tags) {
   return tags.map((tag) => document.createElement(tag));
 }
@@ -60,7 +62,7 @@ let wrapDiv, canvasDiv, message, modeSelect, editor;
   canvasDiv.width = width;
   canvasDiv.height = height;
 })();
-
+*/
 let currentMode = Fragmen.MODE_CLASSIC; // 現在の Fragmen モード
 let currentSource = ''; // 直近のソースコード
 

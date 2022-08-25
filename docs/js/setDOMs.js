@@ -1,26 +1,60 @@
-function createElements(tags) {
-  return tags.map(tag => document.createElement(tag))
-}
+//function createElements(tags) {
+//  return tags.map(tag => document.createElement(tag))
+//}
+
+const createElements = (tags) => tags.map((tag) => document.createElement(tag));
+
+const tagArray = ['main', 'div', 'div', 'select', 'div'];
+const modeOptions = [
+  'classic',
+  'geek',
+  'geeker',
+  'geekest',
+  'classic (300 es)',
+  'geek (300 es)',
+  'geeker (300 es)',
+  'geekest (300 es)',
+  'classic (MRT)',
+  'geek (MRT)',
+  'geeker (MRT)',
+  'geekest (MRT)',
+];
+
+const [wrapDiv, canvasDiv, message, modeSelect, editor] =
+  createElements(tagArray);
+
+modeSelect.style.width = '100%';
+modeSelect.style.height = '2rem';
+modeOptions.forEach((option, index) => {
+  const optionElement = document.createElement('option');
+  optionElement.value = index;
+  optionElement.text = option;
+  modeSelect.appendChild(optionElement);
+});
+
+editor.style.fontFamily = 'monospace';
+editor.style.fontSize = '0.8rem';
+
+document.body.appendChild(wrapDiv);
+wrapDiv.appendChild(modeSelect);
+wrapDiv.appendChild(message);
+wrapDiv.appendChild(editor);
+wrapDiv.appendChild(canvasDiv);
+
+//wrapDiv.style.display = 'grid';
+//wrapDiv.gridTemplateRows = 'auto 1fr';
+message.style.height = '2rem';
+message.style.fontFamily = 'monospace';
+message.textContent = ' ● ready';
+
+wrapDiv.style.height = '100%';
+canvasDiv.style.overflow = 'hidden';
+canvasDiv.style.height = '100%';
+
+// todo: setting fragmen glCanvas size
+const { width, height } = wrapDiv.getBoundingClientRect();
+canvasDiv.width = width;
+canvasDiv.height = height;
 
 
-/*
-<option value="0">classic</option>
-<option value="1">geek</option>
-<option value="2">geeker</option>
-<option value="3">geekest</option>
-<option value="4">classic (300 es)</option>
-<option value="5">geek (300 es)</option>
-<option value="6">geeker (300 es)</option>
-<option value="7">geekest (300 es)</option>
-<option value="8">classic (MRT)</option>
-<option value="9">geek (MRT)</option>
-<option value="10">geeker (MRT)</option>
-<option value="11">geekest (MRT)</option>
-*/
-
-/*
-const wrapDiv = document.createElement('main');
-const canvasDiv = document.createElement('div');
-const message = document.createElement('div');
-
-*/
+export {wrapDiv, canvasDiv, message, modeSelect, editor}
