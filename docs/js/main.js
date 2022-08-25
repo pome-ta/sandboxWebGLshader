@@ -5,7 +5,7 @@ function createElements(tags) {
 }
 
 let latestStatus = 'success';
-const tagArray = ['main', 'div', 'div'];
+const tagArray = ['main', 'div', 'div', 'select', 'div'];
 
 const modeOptions = [
   'classic',
@@ -24,9 +24,8 @@ const modeOptions = [
 
 let wrapDiv, canvasDiv, message, modeSelect, editor;
 (() => {
-  [wrapDiv, canvasDiv, message] = createElements(tagArray);
+  [wrapDiv, canvasDiv, message, modeSelect, editor] = createElements(tagArray);
 
-  modeSelect = document.createElement('select');
   modeSelect.style.width = '100%';
   modeSelect.style.height = '2rem';
   modeOptions.forEach((option, index) => {
@@ -36,7 +35,7 @@ let wrapDiv, canvasDiv, message, modeSelect, editor;
     modeSelect.appendChild(optionElement);
   });
 
-  editor = document.createElement('div');
+  
   editor.style.fontFamily = 'monospace';
   editor.style.fontSize = '0.8rem';
 
