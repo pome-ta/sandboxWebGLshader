@@ -95,29 +95,40 @@ editor.textContent = currentSource;
 canvasDiv.addEventListener('touchmove', (event) => {
   //event.preventDefault();
 });
-/*
+
+/**
+ * シェーダのソースを更新
+ */
+function update(source) {
+  if (fragmen == null) {
+    return;
+  }
+  fragmen.render(source);
+}
+
 // モード変更時の処理
-mode.addEventListener(
+modeSelect.addEventListener(
   'change',
   () => {
     const defaultSourceInPrevMode = fragmenDefaultSource[currentMode];
 
-    const source = editor.getValue();
-    currentMode = parseInt(mode.value);
+    const source = editor.textContent;
+    currentMode = parseInt(modeSelect.value);
     fragmen.mode = currentMode;
 
     // 既定のソースと同じならモードに応じた既定のソースに書き換える
     if (source === defaultSourceInPrevMode) {
       const defaultSource = fragmenDefaultSource[currentMode];
-      editor.setValue(defaultSource);
+      editor.textContent = defaultSource;
+      /*
       setTimeout(() => {
         editor.gotoLine(1);
       }, 100);
+      */
     } else {
       // ソースを置き換えないとしてもビルドはしなおす
-      update(editor.getValue());
+      update(editor.textContent);
     }
   },
   false
 );
-*/
