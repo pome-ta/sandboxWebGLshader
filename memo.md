@@ -1,3 +1,7 @@
+# 📝 2022/08/25
+
+とりあえず、レイアウト考えずにズラズラと書き出すか
+
 # 📝 2022/08/21
 
 [doxas/twigl: twigl.app is an online editor for One tweet shader, with gif generator and sound shader, and broadcast live coding.](https://github.com/doxas/twigl)

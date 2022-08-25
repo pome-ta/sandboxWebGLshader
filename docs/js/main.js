@@ -7,20 +7,51 @@ function createElements(tags) {
 let latestStatus = 'success';
 const tagArray = ['main', 'div', 'div'];
 
-let wrapDiv, canvasDiv, message;
+const modeOptions = [
+  'classic',
+  'geek',
+  'geeker',
+  'geekest',
+  'classic (300 es)',
+  'geek (300 es)',
+  'geeker (300 es)',
+  'geekest (300 es)',
+  'classic (MRT)',
+  'geek (MRT)',
+  'geeker (MRT)',
+  'geekest (MRT)',
+];
+
+let wrapDiv, canvasDiv, message, modeSelect, editor;
 (() => {
   [wrapDiv, canvasDiv, message] = createElements(tagArray);
-  message.style.height = '2rem';
+
+  modeSelect = document.createElement('select');
+  modeSelect.style.width = '100%';
+  modeSelect.style.height = '2rem';
+  modeOptions.forEach((option, index) => {
+    const optionElement = document.createElement('option');
+    optionElement.value = index;
+    optionElement.text = option;
+    modeSelect.appendChild(optionElement);
+  });
+
+  editor = document.createElement('div');
+  editor.style.fontFamily = 'monospace';
+  editor.style.fontSize = '0.8rem';
 
   document.body.appendChild(wrapDiv);
-  wrapDiv.appendChild(canvasDiv);
+  wrapDiv.appendChild(modeSelect);
   wrapDiv.appendChild(message);
+  wrapDiv.appendChild(editor);
+  wrapDiv.appendChild(canvasDiv);
 
-  wrapDiv.style.display = 'grid';
-  wrapDiv.gridTemplateRows = 'auto 1fr';
-
+  //wrapDiv.style.display = 'grid';
+  //wrapDiv.gridTemplateRows = 'auto 1fr';
+  message.style.height = '2rem';
   message.style.fontFamily = 'monospace';
   message.textContent = ' ● ready';
+
   wrapDiv.style.height = '100%';
   canvasDiv.style.overflow = 'hidden';
   canvasDiv.style.height = '100%';
@@ -38,7 +69,8 @@ let currentSource = ''; // 直近のソースコード
 const FRAGMEN_OPTION = {
   target: null,
   eventTarget: null,
-  mouse: true,
+  //mouse: true,
+  mouse: false,
   resize: true,
   escape: false,
 };
@@ -58,7 +90,34 @@ fragmen.onBuild((status, msg) => {
 
 fragmen.mode = currentMode;
 fragmen.render(currentSource);
+editor.textContent = currentSource;
 
 canvasDiv.addEventListener('touchmove', (event) => {
   //event.preventDefault();
 });
+/*
+// モード変更時の処理
+mode.addEventListener(
+  'change',
+  () => {
+    const defaultSourceInPrevMode = fragmenDefaultSource[currentMode];
+
+    const source = editor.getValue();
+    currentMode = parseInt(mode.value);
+    fragmen.mode = currentMode;
+
+    // 既定のソースと同じならモードに応じた既定のソースに書き換える
+    if (source === defaultSourceInPrevMode) {
+      const defaultSource = fragmenDefaultSource[currentMode];
+      editor.setValue(defaultSource);
+      setTimeout(() => {
+        editor.gotoLine(1);
+      }, 100);
+    } else {
+      // ソースを置き換えないとしてもビルドはしなおす
+      update(editor.getValue());
+    }
+  },
+  false
+);
+*/
