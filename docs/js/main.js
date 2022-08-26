@@ -1,5 +1,5 @@
 import { Fragmen } from './fragmen.js';
-import { wrapDiv, canvasDiv, message, modeSelect, editor } from './setDOM.js';
+import { wrapDiv, canvasDiv, message, modeSelect, editor } from './setDOMs.js';
 
 /*
 function createElements(tags) {
