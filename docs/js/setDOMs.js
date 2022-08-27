@@ -29,7 +29,9 @@ modeOptions.forEach((option, index) => {
   const optionElement = document.createElement('option');
   optionElement.value = index;
   optionElement.text = option;
-  modeSelect.appendChild(optionElement);
+  if ([0, 4].includes(index)) {
+    modeSelect.appendChild(optionElement);
+  }
 });
 
 editor.style.fontFamily = 'monospace';
@@ -56,5 +58,4 @@ const { width, height } = wrapDiv.getBoundingClientRect();
 canvasDiv.width = width;
 canvasDiv.height = height;
 
-
-export {wrapDiv, canvasDiv, message, modeSelect, editor}
+export { wrapDiv, canvasDiv, message, modeSelect, editor };
