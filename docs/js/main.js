@@ -16,7 +16,6 @@ const FRAGMEN_OPTION = {
 };
 
 const fragmenDefaultSource = Fragmen.DEFAULT_SOURCE;
-currentMode = Fragmen.MODE_CLASSIC;
 currentSource = fragmenDefaultSource[currentMode];
 // メインとなる fragmen のインスタンス
 const option = Object.assign(FRAGMEN_OPTION, {
