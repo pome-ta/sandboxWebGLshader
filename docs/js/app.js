@@ -238,4 +238,3 @@ function moveInteractive(event) {
   mouseX = event.offsetX / canvasW;
   mouseY = event.offsetY / canvasH;
 }
-
